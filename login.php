@@ -51,7 +51,7 @@ if (isset($_POST['submit'])) {
                             <input type="checkbox" name="keepLoggedCheck" id="keepLoggedCheck">
                             <label for="keepLoggedCheck">Keep me logged in</label>
                         </div>
-                        <a href="">Forgot your password?</a>
+                        <a href="">Forgot your password</a>
                     </div>
                     <button class="btn btn-dark" type="submit" name="submit">
                         Login
