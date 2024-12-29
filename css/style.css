@@ -1,0 +1,192 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+:root {
+    --dark-blue: #003F62;
+    --bg-color: #E7E7E3;
+    --dark-color: #000000;
+    --white-color: #FAFAFA;
+}
+
+.container {
+    min-height: 100vh;
+    background-color: var(--bg-color);
+}
+
+.d-gridx2 {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
+
+
+
+
+
+
+.side-bar {
+    background-color: var(--white-color);
+    border: 1px solid rgba(23, 23, 21, 0.2);
+    padding: 1rem;
+}
+
+.side-bar__header {
+    height: 86px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.side-bar__header-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.side-bar__brand-text {
+    color: var(--dark-blue);
+    font-weight: bold;
+    font-size: 2em;
+
+}
+
+.side-bar__brand-img {
+    width: 24px;
+    height: 24px;
+}
+
+.side-bar__nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-weight: bold;
+    color: #000000;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.side-bar__nav-btn.active {
+    background-color: var(--dark-blue);
+}
+
+.side-bar__nav-btn-img {
+    width: 24px;
+    height: 24px;
+}
+
+.dashboard-header {
+    height: 86px;
+    background-color: var(--white-color);
+    border: 1px solid rgba(23, 23, 21, 0.2);
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    justify-content: end;
+    padding-inline: 60px;
+}
+
+.profile-btn {
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 1em;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.profile-btn__text {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+
+
+
+
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-wrapper {
+    width: 430px;
+    background-color: var(--white-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, .1), 0px 8px 16px rgba(0, 0, 0, .1);
+}
+
+.form-header {
+    text-align: center;
+}
+
+.input-box {
+    margin-top: 18px;
+}
+
+.input-box__label {
+    margin-bottom: px;
+}
+
+.input-box__field {
+    width: 100%;
+    border-radius: 8px;
+    padding: 14px 10px;
+    font-size: 16px;
+    background-color: transparent;
+    border: 1px solid black;
+}
+
+.login-form-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0 24px 0;
+}
+
+.btn {
+    border-radius: 8px;
+    border: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    width: 100%;
+    padding: 14px 10px;
+}
+
+.btn-wrapper{
+    margin-top: 18px;
+}
+
+.btn-dark {
+    background-color: var(--dark-blue);
+    color: var(--white-color);
+}
+
+.new-account-text {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.new-account-link {
+    text-decoration: none;
+}
+
+.fullname-field {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.account-type-field-label{
+    opacity: 0.5;
+}
+.account-types {
+    display: flex;
+    gap: 10px;
+}
