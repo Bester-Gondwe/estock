@@ -5,17 +5,24 @@ if (isset($_POST['submit'])) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $_POST['email'];
         $password = $_POST['password'];
+      $keepMeLoggedIn = isset($_POST['keepLoggedCheck']);
         try {
             $user = new User();
             $loggedInUser = $user->login($email, $password);
             // Store user information in the session
+            
+           
             $_SESSION['user_id'] = $loggedInUser['user_id'];
             $_SESSION['first_name'] = $loggedInUser['first_name'];
             $_SESSION['email'] = $loggedInUser['email'];
             $_SESSION['user_role'] = $user->getUserRoles($loggedInUser['user_id']);
+            if($keepMeLoggedIn){
+                setcookie("email",$email.time() + (30 * 24 * 60 * 60) , "/");
+                setcookie("password",$password.time() + (30 * 24 * 60 * 60) , "/");
+            }
            
             // Redirect to dashboard or another page
-            header("Location: dashboard.php");
+            // header("Location: dashboard.php");
             exit;
         } catch (Exception $e) {
             // Handle login error
@@ -48,7 +55,7 @@ if (isset($_POST['submit'])) {
                     </div>
                     <div class="login-form-bottom">
                         <div>
-                            <input type="checkbox" name="keepLoggedCheck" id="keepLoggedCheck">
+                            <input type="checkbox" name="keepLoggedCheck" id="keepLoggedCheck" value="yes">
                             <label for="keepLoggedCheck">Keep me logged in</label>
                         </div>
                         <a href="">Forgot your password</a>
