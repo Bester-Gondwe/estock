@@ -3,16 +3,18 @@ require_once 'models/User.php';
 session_start();
 if (isset($_POST['submit'])) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $firstname =  $_POST['firstname'];
-        $lastname =  $_POST['lastname'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+        $firstname =  htmlentities($_POST['firstname']);
+        $lastname =  htmlentities($_POST['lastname']);
+        $email = htmlentities($_POST['email']);
+        $password = htmlentities($_POST['password']);
+        $accountType = htmlspecialchars($_POST['account_type']);
         try {
             $user = new User();
             $loggedInUser = $user->login($email, $password);
             $userId = $user->addUser($firstname, $lastname, $email, $password);
-            if ($userId > 0) {
-                $user->assignRoleToUser($userId, 1);
+            $roleId = $user->getRoleByName($accountType);
+            if ($userId > 0 && $roleId > 0) {
+                $user->assignRoleToUser($userId, $roleId);
                 // Store user information in the session
                 $_SESSION['user_id'] = $userId;
                 $_SESSION['first_name'] = $loggedInUser['first_name'];
@@ -56,11 +58,11 @@ if (isset($_POST['submit'])) {
                     <p class="account-type-field-label">Account Type</p>
                     <div class="account-types">
                         <div class="account-type-wrapper">
-                            <input type="radio" name="account_type" id="customer-type">
+                            <input type="radio" name="account_type" id="customer-type" value="Customer">
                             <label for="customer-type">Customer</label>
                         </div>
                         <div class="account-type-wrapper">
-                            <input type="radio" name="account_type" id="merchant-type">
+                            <input type="radio" name="account_type" id="merchant-type" value="Merchant">
                             <label for="merchant-type">Merchant</label>
                         </div>
                     </div>

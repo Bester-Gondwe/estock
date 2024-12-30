@@ -116,6 +116,12 @@ class User extends Database
         return $stmt->fetchColumn() > 0;
     }
 
+    public function getRoleByName($role_name){
+        $query = "SELECT role_id FROM roles WHERE role_name=:role_name LIMIT 1";
+        $stmt = $this->executeQuery($query,['role_name' => $role_name]);
+        return $stmt->fetchColumn();
+    }
+
     public function getUsersByRole($role_name)
     {
         $query = "SELECT u.user_id, u.first_name, u.last_name, u.email 
