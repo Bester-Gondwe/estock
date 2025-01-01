@@ -1,3 +1,28 @@
+
+<?php
+session_start(); // Start the session if not started already
+
+// Example dynamic data
+$totalProducts = 100; // This should be fetched from the database
+$pendingOrders = 25;  // Fetch from your database
+$completedOrders = 75; // Fetch from your database
+$totalRevenue = "MWK 500,000"; // Fetch from your database or calculations
+
+// Example dynamic transaction data
+$transactions = [
+  ['date' => '2025-01-01', 'amount' => 'MWK 10,000', 'status' => 'Completed'],
+  ['date' => '2025-01-02', 'amount' => 'MWK 15,000', 'status' => 'Pending'],
+  ['date' => '2025-01-03', 'amount' => 'MWK 20,000', 'status' => 'Completed'],
+];
+
+// Example dynamic recent activities data
+$activities = [
+  ['icon' => 'fas fa-box', 'text' => 'Order #1234 placed by John Doe', 'time' => '2 minutes ago'],
+  ['icon' => 'fas fa-cogs', 'text' => 'Stock updated for Widget A', 'time' => '10 minutes ago'],
+  ['icon' => 'fas fa-check-circle', 'text' => 'Order #1229 marked as completed', 'time' => '1 hour ago'],
+];
+?>
+
 <?php
 session_start();
 
