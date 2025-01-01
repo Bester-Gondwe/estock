@@ -56,6 +56,110 @@ if (!isset($_SESSION['user_id'])) {
             </div>
             <div class="main">
 
+             <!-- Welcome User -->
+    <h1>Welcome, <?php echo htmlspecialchars($_SESSION['first_name']); ?>!</h1>
+
+<!-- Merchant Dashboard Overview -->
+<div class="dashboard-overview">
+  <div class="overview-card">
+    <h3>Total Products</h3>
+    <p><?php echo $totalProducts; ?></p>
+  </div>
+  <div class="overview-card">
+    <h3>Pending Orders</h3>
+    <p><?php echo $pendingOrders; ?></p>
+  </div>
+  <div class="overview-card">
+    <h3>Completed Orders</h3>
+    <p><?php echo $completedOrders; ?></p>
+  </div>
+  <div class="overview-card">
+    <h3>Total Revenue</h3>
+    <p><?php echo $totalRevenue; ?></p>
+  </div>
+  <div class="overview-card">
+    <h3>Total Customers</h3>
+    <p><?php echo $totalProducts; ?></p>
+  </div>
+
+</div>
+<!-- Recent Activities Section -->
+<h2>Recent Activities</h2>
+<div class="activity-log">
+  <?php foreach ($activities as $activity): ?>
+    <div class="activity-card">
+      <div class="activity-icon">
+        <i class="<?php echo $activity['icon']; ?>"></i>
+      </div>
+      <div class="activity-details">
+        <p><strong><?php echo $activity['text']; ?></strong></p>
+        <small><?php echo $activity['time']; ?></small>
+      </div>
+    </div>
+  <?php endforeach; ?>
+</div>
+
+<!-- Transaction History Section -->
+<h2>Transaction History</h2>
+<div class="transaction-history">
+  <?php foreach ($transactions as $transaction): ?>
+    <div class="transaction-card">
+      <p><strong>Date:</strong> <?php echo $transaction['date']; ?></p>
+      <p><strong>Amount:</strong> <?php echo $transaction['amount']; ?></p>
+      <p><strong>Status:</strong> <?php echo $transaction['status']; ?></p>
+    </div>
+  <?php endforeach; ?>
+</div>
+
+
+
+<!-- Upcoming Features Section -->
+<h2>Upcoming Features</h2>
+
+<div class="upcoming-features">
+  <div class="feature-card">
+    <div class="feature-icon">
+      <i class="fas fa-users"></i> <!-- User Icon -->
+    </div>
+    <div class="feature-details">
+      <h3>Customer Management</h3>
+      <p>Manage your customers, track their orders, and improve engagement.</p>
+      <div class="progress-bar">
+        <div class="progress" style="width: 40%"></div> <!-- 40% Progress -->
+      </div>
+      <small>40% Complete</small>
+    </div>
+  </div>
+
+  <div class="feature-card">
+    <div class="feature-icon">
+      <i class="fas fa-chart-line"></i> <!-- Sales Report Icon -->
+    </div>
+    <div class="feature-details">
+      <h3>Sales Reports</h3>
+      <p>Analyze your sales performance with advanced reports and analytics.</p>
+      <div class="progress-bar">
+        <div class="progress" style="width: 60%"></div> <!-- 60% Progress -->
+      </div>
+      <small>60% Complete</small>
+    </div>
+  </div>
+
+  <div class="feature-card">
+    <div class="feature-icon">
+      <i class="fas fa-cogs"></i> <!-- Settings Icon -->
+    </div>
+    <div class="feature-details">
+      <h3>Advanced Settings</h3>
+      <p>Customize your dashboard settings to better suit your needs.</p>
+      <div class="progress-bar">
+        <div class="progress" style="width: 20%"></div> <!-- 20% Progress -->
+      </div>
+      <small>20% Complete</small>
+    </div>
+  </div>
+
+
             </div>
         </div>
     </div>
