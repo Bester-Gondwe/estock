@@ -76,6 +76,11 @@ if (!isset($_SESSION['user_id'])) {
                 <a href="" class="side-bar__nav-btn">
                     <img class="side-bar__nav-btn-img" src="images/online-delivery-svgrepo-com.svg" alt="Orders Icon">
                     <p class="side-bar__nav-btn-text">Orders</p>
+
+                    <a href="" class="side-bar__nav-btn">
+                    <img class="side-bar__nav-btn-img" src="images/online-delivery-svgrepo-com.svg" alt="Orders Icon">
+                    <p class="side-bar__nav-btn-text">Categories</p>
+                </a>
                 </a>
             </div>
         </div>
