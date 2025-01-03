@@ -91,6 +91,7 @@ if (!isset($_SESSION['user_id'])) {
                 <div class="profile-btn">
                     <p class="profile-btn__text"><?php echo htmlspecialchars($_SESSION['first_name']); ?></p>
                     <img src="images/ic_down-arrow.svg" alt="Search Icon" width="10" height="6">
+                    
                 </div>
                 <a href=""> <?php echo "<a href='logout.php'>Logout</a>"; ?></a>
             </div>
