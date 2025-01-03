@@ -95,7 +95,7 @@ if (!isset($_SESSION['user_id'])) {
                 <a href=""> <?php echo "<a href='logout.php'>Logout</a>"; ?></a>
             </div>
 
-            <div class="main">
+            <div class="main-content">
             
     <!-- Welcome User -->
     <h1>Welcome, <?php echo htmlspecialchars($_SESSION['first_name']); ?>!</h1>
