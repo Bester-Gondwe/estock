@@ -22,7 +22,7 @@ if (isset($_POST['submit'])) {
             }
            
             // Redirect to dashboard or another page
-            header("Location: dashboard.php");
+            header("Location: login.php");
             exit;
         } catch (Exception $e) {
             // Handle login error
