@@ -1,7 +1,8 @@
+
 <?php
 require_once 'models/User.php';
 session_start();
-if (isset($_POST['submit'])) {
+if (htmlspecialchars($_POST['submit'])) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $_POST['email'];
         $password = $_POST['password'];
@@ -22,7 +23,7 @@ if (isset($_POST['submit'])) {
             }
            
             // Redirect to dashboard or another page
-            header("Location: login.php");
+            header("Location: dashboard.php");
             exit;
         } catch (Exception $e) {
             // Handle login error

@@ -38,7 +38,7 @@ try {
 
 // Redirect to login if the user is not logged in
 if (!isset($_SESSION['user_id'])) {
-  header("Location: dashboard.php");
+  header("Location: login.php");
   exit;
 }
 ?>
@@ -88,7 +88,7 @@ if (!isset($_SESSION['user_id'])) {
             <div class="dashboard-header">
                 <img src="images/ic_search.svg" alt="Search Icon" width="24" height="24">
                 <div class="profile-btn">
-                    <p class="profile-btn__text"><?php echo isset($_SESSION['firstname']); ?></p>
+                    <p class="profile-btn__text"><?php echo htmlspecialchars($_SESSION['first_name']); ?></p>
                     <img src="images/ic_down-arrow.svg" alt="Search Icon" width="10" height="6">
                     
                 </div>
@@ -98,7 +98,7 @@ if (!isset($_SESSION['user_id'])) {
             <div class="main-content">
             
     <!-- Welcome User -->
-    <h1>Welcome, <?php echo isset ($_SESSION['firstname']); ?>!</h1>
+    <h1>Welcome, <?php echo htmlspecialchars($_SESSION['first_name']); ?></h1>
 
     <!-- Merchant Dashboard Overview -->
     <div class="dashboard-overview">
