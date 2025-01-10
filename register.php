@@ -17,7 +17,7 @@ if (isset($_POST['submit'])) {
                 $user->assignRoleToUser($userId, $roleId);
                 // Store user information in the session
                 $_SESSION['user_id'] = $userId;
-                $_SESSION['first_name'] = $loggedInUser['first_name'];
+                $_SESSION['firstname'] = $loggedInUser['firstname'];
                 $_SESSION['email'] = $loggedInUser['email'];
                 $_SESSION['user_role'] = $user->getUserRoles($loggedInUser['user_id']);
             }

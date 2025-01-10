@@ -69,15 +69,18 @@ if (!isset($_SESSION['user_id'])) {
                     <img class="side-bar__nav-btn-img" src="images/dashboard-svgrepo-com.svg" alt="Dashboard Icon">
                     <p class="side-bar__nav-btn-text">Dashboard</p>
                 </a>
-                <a href="" class="side-bar__nav-btn">
+                <a href="HELLO.php" class="side-bar__nav-btn">
                     <img class="side-bar__nav-btn-img" src="images/album-collection-svgrepo-com.svg" alt="Products Icon">
                     <p class="side-bar__nav-btn-text">Products</p>
                 </a>
-                <a href="" class="side-bar__nav-btn">
+                <a href="orders.php" class="side-bar__nav-btn">
                     <img class="side-bar__nav-btn-img" src="images/online-delivery-svgrepo-com.svg" alt="Orders Icon">
                     <p class="side-bar__nav-btn-text">Orders</p>
 
-                    <a href="" class="side-bar__nav-btn">
+</a>
+
+
+                    <a href="category.php" class="side-bar__nav-btn">
                     <img class="side-bar__nav-btn-img" src="images/online-delivery-svgrepo-com.svg" alt="Orders Icon">
                     <p class="side-bar__nav-btn-text">Categories</p>
                 </a>
