@@ -1,155 +1,249 @@
 <!DOCTYPE html>
-<!-- Coding By CodingNepal - www.codingnepalweb.com -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>E-store</title>
-  <link rel="stylesheet" href="style1.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
-  <script src="https://kit.fontawesome.com/33f70ab661.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="css/home.css">
+  <script src="js/home.js"></script>
 </head>
 <body>
-    <header>
-      <nav class="navbar">
-        <div class="nav-logo">
-          <a href="#">E-STORE</a>
+  <nav class="nav-bar">
+    <script src="js/nav.js"></script>
+    <div class="nav">
+      <img src="images/img/linkedin_banner_image_1.png" class="brand-logo" alt="">
+      <div class="nav-items">
+        <div class="search">
+          <input type="text" class="search-box" placeholder="search product">
+          <button class="search-btn">search</button>
         </div>
-        <div class="address">
-          <a href="#" class="deliver">Deliver</a>
-          <div class="map-icon">
-            <span class="material-symbols-outlined">location_on</span>
-            <a href="#" class="location">mzuzu</a>
-          </div>
-        </div>
+        <a href="#"><img src="images/img/user.png" alt=""></a>
+        <a href=""><img src="images/img/cart.png" alt=""></a>
+      </div>
+    </div>
+    <ul class="links-container">
+    <li class="link-item"><a href="#" class="link">home</a></li>
+    <li class="link-item"><a href="#" class="link">Customer Service</a></li>
+    <li class="link-item"><a href="#" class="link">Gift Cards</a></li>
+    <li class="link-item"><a href="#" class="link">kids</a></li>
+    <li class="link-item"><a href="#" class="link">accessories</a></li>
+</ul>
+  </nav>
 
-        <div class="nav-search">
-          <select class="select-search">
-            <option>All</option>
-            <option>All Categories</option>
-            <option>Amazon Devices</option>
-          </select>
-          <input type="text" placeholder="Search" class="search-input">
-          <div class="search-icon">
-            <span class="material-symbols-outlined">search</span>
-          </div>
+  <header class="hero-section">
+    <div class="content">
+      <img src="images/img/twitter_header_photo_1.png" class="logo" alt="">
+    </div>
+  </header>
+  <section class="product">
+    <h2 class="product-category">newly added</h2>
+    <button class="pre-btn"><img src="img/arrow.png" alt=""></button>
+    <button class="nxt-btn"><img src="img/arrow.png" alt=""></button>
+    <div class="product-container">
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card1.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
         </div>
-
-        <div class="sign-in">
-         <a href="#"> <p>Hello, sign in</p>
-          <span>Account &amp; Lists</span></a>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
         </div>
-
-        <div class="returns">
-          <a href="#"><p>Returns</p>
-            <span>&amp; Orders</span></a>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card12.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
         </div>
-
-        <div class="cart">
-          <a href="#">
-            <span class="material-symbols-outlined cart-icon">shopping_cart</span>
-            </a>
-            <p>Cart</p>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
         </div>
-      </nav>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card2.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card3.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card4.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card5.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card6.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card7.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
+        </div>
+      </div>
       
-      <div class="banner">
-        <div class="banner-content">
-          <div class="panel">
-            <span class="material-symbols-outlined">menu</span>
-            <a href="#">All</a>
-          </div>
+    </div>
+  </section>
+  <section class="collection-container">
+    <a href="#" class="collection">
+        <img src="images/img/pen-4337524_1920.jpg" alt="">
+        <p class="collection-title">tech <br> apparels</p>
+    </a>
+    <a href="#" class="collection">
+        <img src="images/img/mug-8235059_1920.jpg" alt="">
+        <p class="collection-title">food <br> products</p>
+    </a>
+    <a href="#" class="collection">
+        <img src="images/img/accessories-collection.png" alt="">
+        <p class="collection-title">Clothes</p>
+    </a>
   
-          <ul class="links">
-            <li><a href="#">Today's Deals</a></li>
-            <li><a href="#">Customer Service</a></li>
-            <li><a href="#">Registry</a></li>
-            <li><a href="#">Gift Cards</a></li>
-            <li><a href="#">Sell</a></li>
-          </ul>
-          <div class="deals">
-            <a href="#">Shop deals in Electronics</a>
-          </div>
+    
+</section>
+
+<section class="product">
+    <button class="pre-btn"><img src="img/arrow.png" alt=""></button>
+    <button class="nxt-btn"><img src="img/arrow.png" alt=""></button>
+    <div class="product-container">
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card1.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
         </div>
       </div>
-    </header>
-
-    <section class="hero-section">
-       <div class="slider">
-        <div class="list">
-          <div class="item">
-            <img src="images/bg.jpg" alt="">
-            <div class="content"></div>
-          </div>
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card12.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
         </div>
-       </div>
-    </section>
-
-    <section class="shop-section">
-      <div class="shop-images">
-        <div class="shop-link">
-          <h3>Shop Laptops &amp; Tables</h3>
-          <img src="images/img-1.png" alt="card">
-          <a href="#"><i class="fa-solid fa-ellipsis"></i></a>
-        </div>
-        <div class="shop-link">
-          <h3>Shop Smartwatches</h3>
-          <img src="images/img-2.png" alt="card">
-          <a href="#"><i class="fa-solid fa-ellipsis"></i></a>
-        </div>
-        <div class="shop-link">
-          <h3>Create with Strip Lights</h3>
-          <img src="images/img-3.png" alt="card">
-          <a href="#"><i class="fa-solid fa-ellipsis"></i></a>
-        </div>
-        <div class="shop-link">
-          <h3>Home Refresh Ideas</h3>
-          <img src="images/img-4.png" alt="card">
-          <a href="#"><i class="fa-solid fa-ellipsis"></i></a>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
         </div>
       </div>
-    </section>
-
-    <footer>
-      <a href="#" class="footer-title">
-        Back to top
-      </a>
-      <div class="footer-items">
-        <ul>
-          <h3>Get to Know Us</h3>
-          <li><a href="#">About us</a></li>
-          <li><a href="#">Careers</a></li>
-          <li><a href="#">Press Release</a></li>
-          <li><a href="#">Amazon Science</a></li>
-        </ul>
-        <ul>
-          <h3>Connect with Us</h3>
-          <li><a href="#">Facebook</a></li>
-          <li><a href="#">Twitter</a></li>
-          <li><a href="#">Instagram</a></li>
-        </ul>
-        <ul>
-          <h3>Make Money with Us</h3>
-          <li><a href="#">Sell on Amazon</a></li>
-          <li><a href="#">Sell under Amazon Accelerator</a></li>
-          <li><a href="#">Protect and Build Your Brand</a></li>
-          <li><a href="#">Amazon Global Selling</a></li>
-          <li><a href="#">Become an Affiliate</a></li>
-          <li><a href="#">Fulfillment by Amazon</a></li>
-          <li><a href="#">Advertise Your Products</a></li>
-          <li><a href="#">Amazon Pay on Merchants</a></li>
-        </ul>
-        <ul>
-          <h3>Let Us Help You</h3>
-          <li><a href="#">COVID-19 and Amazon</a></li>
-          <li><a href="#">Your Account</a></li>
-          <li><a href="#">Return Centre</a></li>
-          <li><a href="#">100% Purchase Protection</a></li>
-          <li><a href="#">Amazon App Download</a></li>
-          <li><a href="#">Help</a></li>
-        </ul>
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card2.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
+        </div>
       </div>
-    </footer>
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card3.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card4.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card5.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card6.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/img/card7.png" class="product-thumb" alt="">
+          <button class="card-btn">add to whishlist</button>
+        </div>
+        <div class="product-info">
+          <h2 class="product-brand">brand</h2>
+          <p class="product-short-des">a short line about the cloth..</p>
+          <span class="price">k40</span>
+        </div>
+      </div>
+      
+    </div>
+  </section>
 
+  
 </body>
 </html>
