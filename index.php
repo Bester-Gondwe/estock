@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>E-store</title>
   <link rel="stylesheet" href="css/home.css">
-  <script src="js/home.js"></script>
 </head>
 <body>
-  <nav class="nav-bar">
-    <script src="js/nav.js"></script>
+  <nav class="navbar">
     <div class="nav">
       <img src="images/img/linkedin_banner_image_1.png" class="brand-logo" alt="">
       <div class="nav-items">
@@ -37,8 +35,8 @@
   </header>
   <section class="product">
     <h2 class="product-category">newly added</h2>
-    <button class="pre-btn"><img src="img/arrow.png" alt=""></button>
-    <button class="nxt-btn"><img src="img/arrow.png" alt=""></button>
+    <button class="pre-btn"><img src="images/img/arrow.png" alt=""></button>
+    <button class="nxt-btn"><img src="images/img/arrow.png" alt=""></button>
     <div class="product-container">
       <div class="product-card">
         <div class="product-image">
@@ -244,6 +242,7 @@
     </div>
   </section>
 
-  
+  <script src="js/home.js"></script>
+  <script src="js/nav.js"></script>
 </body>
 </html>
