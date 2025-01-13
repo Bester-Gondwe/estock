@@ -29,6 +29,8 @@
 
 .side-bar {
   background-color: var(--white-color);
+  background-color:#e7d8d8 ;
+  border: #374137;
   padding: 1rem;
   padding: 1rem;
   position: fixed; 
@@ -36,16 +38,20 @@
   left: 0; 
   height: 100vh;
   width: 250px;
+
   overflow-y: auto; 
   z-index: 100;
 }
 
 .side-bar__header {
 height: 50px;
-width: fit-content;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  max-width: 12000px;
+  margin: 20px auto;
+
 }
 
 .side-bar__header-brand {
@@ -87,15 +93,18 @@ width: fit-content;
 }
 
 .dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ffffff;
-  padding: 15px 30px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 10;
+    display: flex;
+    margin-left: 255px;
+width: 90%;
+    gap: 40px;
+    justify-content: end;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 15px 3px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 
@@ -176,6 +185,7 @@ width: fit-content;
 
 .new-account-text {
   text-align: center;
+
   margin-top: 10px;
   background: none; 
   border: none; 
@@ -210,16 +220,16 @@ width: fit-content;
 /* DASHBOARD STYLING*/
 
 .main-content {
-  width: 100%;
-  max-width: 12000px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  margin-left: 400px; /* Leaves space for the fixed sidebar */
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin-left: 255px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Headings */
@@ -285,7 +295,7 @@ h2 {
 /* Products Page Styles */
 .container {
   max-width: 1200px;
-  margin: 50px auto;
+  margin: 5px auto;
   background-color: var(--white-color);
   padding: 20px;
   border-radius: 8px;
@@ -326,7 +336,7 @@ table tbody tr:nth-child(even) {
 }
 
 table tbody tr:hover {
-  background-color: rgba(0, 63, 98, 0.1);
+  background-color: rgba(72, 127, 156, 0.1);
 }
 
 a {

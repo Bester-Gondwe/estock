@@ -52,6 +52,7 @@ if (!isset($_SESSION['user_id'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/orders.css" />
 </head>
 
 <body>
@@ -129,9 +130,8 @@ if (!isset($_SESSION['user_id'])) {
             <h3>Total Customers</h3>
             <p><?php echo $totalProducts; ?></p>
           </div>
-         
+         </div>
 
-        </div>
         <!-- Recent Orders Section -->
 <h2>Recent Orders</h2>
 <div class="order-log">
@@ -158,6 +158,94 @@ if (!isset($_SESSION['user_id'])) {
     <p>No recent orders available.</p>
   <?php endif; ?>
 </div>
+
+<section class="orders">
+    <div class="orders-table__wrapper">
+        <div>
+            <h4 class="table-title">Recent Purchases</h4>
+        </div>
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Order ID</th>
+                    <th>Date</th>
+                    <th>Customer Name</th>
+                    <th>Status</th>
+                    <th>Amount</th>
+                </tr>
+            <tbody>
+                <tr class="order-table__row" id="row-1" data-id="1">
+                    <td>Lorem Ipsum</td>
+                    <td>#256789</td>
+                    <td>Nov 6th,2025</td>
+                    <td>Admin</td>
+                    <td><span class="dot derivered"></span>
+                        Cancled</td>
+                    <td>MWK200000</td>
+                </tr>
+                <tr class="order-table__row">
+                    <td>Lorem Ipsum</td>
+                    <td>#256789</td>
+                    <td>Nov 6th,2025</td>
+                    <td>Admin</td>
+                    <td><span class="dot cancled"></span>
+                        Cancled</td>
+                    <td>MWK200000</td>
+                </tr>
+                <tr class="order-table__row">
+                    <td>Lorem Ipsum</td>
+                    <td>#256789</td>
+                    <td>Nov 6th,2025</td>
+                    <td>Admin</td>
+                    <td>Cancled</td>
+                    <td>MWK200000</td>
+                </tr>
+                <tr class="order-table__row">
+                    <td>Lorem Ipsum</td>
+                    <td>#256789</td>
+                    <td>Nov 6th,2025</td>
+                    <td>Admin</td>
+                    <td>Cancled</td>
+                    <td>MWK200000</td>
+                </tr>
+                <tr class="order-table__row">
+                    <td>Lorem Ipsum</td>
+                    <td>#256789</td>
+                    <td>Nov 6th,2025</td>
+                    <td>Admin</td>
+                    <td>Cancled</td>
+                    <td>MWK200000</td>
+                </tr>
+                <tr class="order-table__row">
+                    <td>Lorem Ipsum</td>
+                    <td>#256789</td>
+                    <td>Nov 6th,2025</td>
+                    <td>Admin</td>
+                    <td>Cancled</td>
+                    <td>MWK200000</td>
+                </tr>
+                <tr class="order-table__row">
+                    <td>Lorem Ipsum</td>
+                    <td>#256789</td>
+                    <td>Nov 6th,2025</td>
+                    <td>Admin</td>
+                    <td>Cancled</td>
+                    <td>MWK200000</td>
+                </tr>
+                <tr class="order-table__row">
+                    <td>Lorem Ipsum</td>
+                    <td>#256789</td>
+                    <td>Nov 6th,2025</td>
+                    <td>Admin</td>
+                    <td>Cancled</td>
+                    <td>MWK200000</td>
+                </tr>
+            </tbody>
+            </thead>
+        </table>
+    </div>
+</section>
 
 
         <!-- <script>
