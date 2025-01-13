@@ -48,148 +48,115 @@ if (!isset($_SESSION['user_id'])) {
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
-    <div class="container d-gridx2">
-        <div class="side-bar">
-            <div class="side-bar__header">
-                <a class="side-bar__header-brand" href="">
-                    <p class="side-bar__brand-text">eStock</p>
-                    <img class="side-bar__brand-img" src="images/shop-bag-with-handle-svgrepo-com.svg"
-                        alt="eStock Logo">
-                </a>
-            </div>
-            <div class="side-bar__nav">
-                <a href="" class="side-bar__nav-btn">
-                    <img class="side-bar__nav-btn-img" src="images/dashboard-svgrepo-com.svg" alt="Dashboard Icon">
-                    <p class="side-bar__nav-btn-text">Dashboard</p>
-                </a>
-                <a href="HELLO.php" class="side-bar__nav-btn">
-                    <img class="side-bar__nav-btn-img" src="images/album-collection-svgrepo-com.svg" alt="Products Icon">
-                    <p class="side-bar__nav-btn-text">Products</p>
-                </a>
-                <a href="orders.php" class="side-bar__nav-btn">
-                    <img class="side-bar__nav-btn-img" src="images/online-delivery-svgrepo-com.svg" alt="Orders Icon">
-                    <p class="side-bar__nav-btn-text">Orders</p>
-
-</a>
-
-
-                    <a href="category.php" class="side-bar__nav-btn">
-                    <img class="side-bar__nav-btn-img" src="images/online-delivery-svgrepo-com.svg" alt="Orders Icon">
-                    <p class="side-bar__nav-btn-text">Categories</p>
-                </a>
-                </a>
-            </div>
-        </div>
-        <div class="center-content">
-            <div class="dashboard-header">
-                <img src="images/ic_search.svg" alt="Search Icon" width="24" height="24">
-                <div class="profile-btn">
-                    <p class="profile-btn__text"><?php echo htmlspecialchars($_SESSION['first_name']); ?></p>
-                    <img src="images/ic_down-arrow.svg" alt="Search Icon" width="10" height="6">
-                    
-                </div>
-                <a href=""> <?php echo "<a href='logout.php'>Logout</a>"; ?></a>
-            </div>
-
-            <div class="main-content">
-            
-    <!-- Welcome User -->
-    <h1>Welcome, <?php echo htmlspecialchars($_SESSION['first_name']); ?></h1>
-
-    <!-- Merchant Dashboard Overview -->
-    <div class="dashboard-overview">
-      <div class="overview-card">
-        <h3>Total Products</h3>
-        <p><?php echo $totalProducts; ?></p>
+  <div class="container d-gridx2">
+    <div class="side-bar">
+      <div class="side-bar__header">
+        <a class="side-bar__header-brand" href="">
+          <p class="side-bar__brand-text">eStock</p>
+          <img class="side-bar__brand-img" src="images/shop-bag-with-handle-svgrepo-com.svg"
+            alt="eStock Logo">
+        </a>
       </div>
-      <div class="overview-card">
-        <h3>Pending Orders</h3>
-        <p><?php echo $pendingOrders; ?></p>
-      </div>
-      <div class="overview-card">
-        <h3>Completed Orders</h3>
-        <p><?php echo $completedOrders; ?></p>
-      </div>
-      <div class="overview-card">
-        <h3>Total Revenue</h3>
-        <p><?php echo $totalRevenue; ?></p>
-      </div>
-      <div class="overview-card">
-        <h3>Total Customers</h3>
-        <p><?php echo $totalProducts; ?></p>
-      </div>
+      <div class="side-bar__nav">
+        <a href="" class="side-bar__nav-btn">
+          <img class="side-bar__nav-btn-img" src="images/dashboard-svgrepo-com.svg" alt="Dashboard Icon">
+          <p class="side-bar__nav-btn-text">Dashboard</p>
+        </a>
+        <a href="products.php" class="side-bar__nav-btn">
+          <img class="side-bar__nav-btn-img" src="images/album-collection-svgrepo-com.svg" alt="Products Icon">
+          <p class="side-bar__nav-btn-text">Products</p>
+        </a>
+        <a href="orders.php" class="side-bar__nav-btn">
+          <img class="side-bar__nav-btn-img" src="images/online-delivery-svgrepo-com.svg" alt="Orders Icon">
+          <p class="side-bar__nav-btn-text">Orders</p>
 
+        </a>
+
+
+        <a href="category.php" class="side-bar__nav-btn">
+          <img class="side-bar__nav-btn-img" src="images/online-delivery-svgrepo-com.svg" alt="Orders Icon">
+          <p class="side-bar__nav-btn-text">Categories</p>
+        </a>
+        </a>
+      </div>
     </div>
- <!-- Recent Activities Section -->
- <h2>Recent Activities</h2>
-        <div class="activity-log">
-          <?php if (!empty($activities)): ?>
-            <?php foreach ($activities as $activity): ?>
-              <div class="activity-card">
-                <div class="activity-icon">
-                  <i class="<?php echo htmlspecialchars($activity['icon']); ?>"></i>
-                </div>
-                <div class="activity-details">
-                  <p><strong><?php echo htmlspecialchars($activity['text']); ?></strong></p>
-                  <small><?php echo htmlspecialchars($activity['time']); ?></small>
-                </div>
-              </div>
-            <?php endforeach; ?>
-          <?php else: ?>
-            <p>No recent activities available.</p>
-          <?php endif; ?>
+    <div class="center-content">
+      <div class="dashboard-header">
+        <img src="images/ic_search.svg" alt="Search Icon" width="24" height="24">
+        <div class="profile-btn">
+          <p class="profile-btn__text"><?php echo htmlspecialchars($_SESSION['first_name']); ?></p>
+          <img src="images/ic_down-arrow.svg" alt="Search Icon" width="10" height="6">
+
         </div>
+        <a href=""> <?php echo "<a href='logout.php'>Logout</a>"; ?></a>
+      </div>
 
+      <div class="main-content">
 
-        <!-- Transaction History Section -->
-        <h2>Transaction History</h2>
-        <div class="transaction-history">
-          <?php if (!empty($transactions)): ?>
-            <?php foreach ($transactions as $transaction): ?>
-              <div class="transaction-card">
-                <p><strong>Date:</strong> <?php echo htmlspecialchars($transaction['date']); ?></p>
-                <p><strong>Amount:</strong> MWK <?php echo htmlspecialchars($transaction['amount']); ?></p>
-                <p><strong>Status:</strong> <?php echo htmlspecialchars($transaction['status']); ?></p>
-              </div>
-            <?php endforeach; ?>
-          <?php else: ?>
-            <p>No transactions found.</p>
-          <?php endif; ?>
+        <!-- Welcome User -->
+        <h1>Welcome, <?php echo htmlspecialchars($_SESSION['first_name']); ?></h1>
+
+        <!-- Merchant Dashboard Overview -->
+        <div class="dashboard-overview">
+          <div class="overview-card">
+            <h3>Total Products</h3>
+            <p><?php echo $totalProducts; ?></p>
+          </div>
+          <div class="overview-card">
+            <h3>Pending Orders</h3>
+            <p><?php echo $pendingOrders; ?></p>
+          </div>
+          <div class="overview-card">
+            <h3>Completed Orders</h3>
+            <p><?php echo $completedOrders; ?></p>
+          </div>
+          <div class="overview-card">
+            <h3>Total Revenue</h3>
+            <p><?php echo $totalRevenue; ?></p>
+          </div>
+          <div class="overview-card">
+            <h3>Total Customers</h3>
+            <p><?php echo $totalProducts; ?></p>
+          </div>
+         
+
         </div>
+        <!-- Recent Orders Section -->
+<h2>Recent Orders</h2>
+<div class="order-log">
+  <?php
+  // Fetch recent orders from the database
+  require_once 'models/Order.php';
 
-     <!-- Upcoming Features Section -->
-        <h2>Upcoming Features</h2>
-        <div class="upcoming-features">
-          <?php if (!empty($upcomingFeatures)): ?>
-            <?php foreach ($upcomingFeatures as $feature): ?>
-              <div class="feature-card">
-                <div class="feature-icon">
-                  <i class="<?php echo htmlspecialchars($feature['icon']); ?>"></i> <!-- Feature Icon -->
-                </div>
-                <div class="feature-details">
-                  <h3><?php echo htmlspecialchars($feature['title']); ?></h3>
-                  <p><?php echo htmlspecialchars($feature['description']); ?></p>
-                  <div class="progress-bar">
-                    <div class="progress" style="width: <?php echo htmlspecialchars($feature['progress']); ?>%"></div>
-                  </div>
-                  <small><?php echo htmlspecialchars($feature['progress']); ?>% Complete</small>
-                </div>
-              </div>
-            <?php endforeach; ?>
-          <?php else: ?>
-            <p>No upcoming features available at the moment.</p>
-          <?php endif; ?>
+  $order = new Order();
+  $recentOrders = $order->getRecentOrders(); // Fetch recent orders using a method
+
+  if (!empty($recentOrders)): ?>
+    <?php foreach ($recentOrders as $order): ?>
+      <div class="order-card">
+        <div class="order-details">
+          <p><strong>Order ID:</strong> <?php echo htmlspecialchars($order['order_id']); ?></p>
+          <p><strong>Customer Name:</strong> <?php echo htmlspecialchars($order['customer_name']); ?></p>
+          <p><strong>Total Amount:</strong> $<?php echo htmlspecialchars(number_format($order['total_amount'], 2)); ?></p>
+          <p><strong>Status:</strong> <?php echo htmlspecialchars($order['status']); ?></p>
+          <small><strong>Placed On:</strong> <?php echo htmlspecialchars($order['placed_time']); ?></small>
         </div>
+      </div>
+    <?php endforeach; ?>
+  <?php else: ?>
+    <p>No recent orders available.</p>
+  <?php endif; ?>
+</div>
 
 
-    <script>
+        <!-- <script>
         // Get all nav items
         const navItems = document.querySelectorAll('.side-bar__nav-btn');
 
@@ -206,7 +173,7 @@ if (!isset($_SESSION['user_id'])) {
                 this.classList.add('active');
             });
         });
-    </script>
+    </script> -->
 </body>
 
 </html>

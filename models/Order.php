@@ -52,14 +52,14 @@ class Order extends Database
         $this->executeQuery($query, ['order_id' => $order_id, 'order_status' => $order_status]);
     }
 
-    // cancel order
+    // Cancel order
     public function cancelOrder($order_id)
     {
         $query = "UPDATE {$this->ordersTable} SET order_status = 'cancelled' WHERE order_id = :order_id";
         $this->executeQuery($query, ['order_id' => $order_id]);
     }
 
-    // get all orders
+    // Get all orders
     public function getAllOrders()
     {
         $query = "SELECT * FROM {$this->ordersTable} ORDER BY created_at DESC";
@@ -67,7 +67,7 @@ class Order extends Database
         return $stmt->fetchAll();
     }
 
-    // get paginated orders
+    // Get paginated orders
     public function getOrdersPaginated($offset, $limit)
     {
         $query = "SELECT * FROM {$this->ordersTable} ORDER BY created_at DESC LIMIT :offset, :limit";
@@ -75,7 +75,7 @@ class Order extends Database
         return $stmt->fetchAll();
     }
 
-    // count orders by customer
+    // Count orders by customer
     public function countOrdersByCustomer($user_id)
     {
         $query = "SELECT COUNT(*) AS total FROM {$this->ordersTable} WHERE user_id = :user_id";
@@ -84,7 +84,7 @@ class Order extends Database
         return $stmt->fetch()['total'];
     }
 
-
+    // Calculate order total
     public function calculateOrderTotal($order_id)
     {
         $query = "SELECT SUM(oi.quantity * oi.price) AS total 
@@ -94,7 +94,7 @@ class Order extends Database
         return $stmt->fetch()['total'];
     }
 
-    // update order item
+    // Update order item
     public function updateOrderItem($order_id, $product_id, $quantity, $price)
     {
         $query = "UPDATE {$this->orderItemsTable} 
@@ -108,4 +108,24 @@ class Order extends Database
         ];
         $this->executeQuery($query, $params);
     }
+
+    // Get recent orders
+    public function getRecentOrders($limit = 10)
+{
+    $query = "SELECT o.order_id, 
+                     CONCAT(u.first_name, ' ', u.last_name) AS customer_name, 
+                     o.total_amount, 
+                     o.status, 
+                     o.order_date 
+              FROM $this->ordersTable o
+              INNER JOIN users u ON o.user_id = u.user_id
+              ORDER BY o.order_date DESC 
+              LIMIT $limit";
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
+    
 }
