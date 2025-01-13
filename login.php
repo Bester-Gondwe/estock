@@ -26,7 +26,7 @@ if (isset($_POST['submit'])) {
             }
 
             // Redirect to the dashboard
-            header("Location: dashboard.php");
+            header("Location: ./");
             exit;
 
         } catch (Exception $e) {

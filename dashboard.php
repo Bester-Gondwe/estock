@@ -150,7 +150,7 @@ if (!isset($_SESSION['user_id'])) {
           <p><strong>Customer Name:</strong> <?php echo htmlspecialchars($order['customer_name']); ?></p>
           <p><strong>Total Amount:</strong> $<?php echo htmlspecialchars(number_format($order['total_amount'], 2)); ?></p>
           <p><strong>Status:</strong> <?php echo htmlspecialchars($order['status']); ?></p>
-          <small><strong>Placed On:</strong> <?php echo htmlspecialchars($order['placed_time']); ?></small>
+          
         </div>
       </div>
     <?php endforeach; ?>

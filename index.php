@@ -15,13 +15,14 @@
           <input type="text" class="search-box" placeholder="search product">
           <button class="search-btn">search</button>
         </div>
+        
         <a href="#"><img src="images/img/user.png" alt=""></a>
-        <a href=""><img src="images/img/cart.png" alt=""></a>
+        <a href="login.php"><img src="images/img/cart.png" alt=""></a>
       </div>
     </div>
     <ul class="links-container">
-    <li class="link-item"><a href="#" class="link">home</a></li>
-    <li class="link-item"><a href="#" class="link">Customer Service</a></li>
+    <li class="link-item"><a href="" class="link">home</a></li>
+    <li class="link-item"><a href="orders.php" class="link">Customer Service</a></li>
     <li class="link-item"><a href="#" class="link">Gift Cards</a></li>
     <li class="link-item"><a href="#" class="link">kids</a></li>
     <li class="link-item"><a href="#" class="link">accessories</a></li>
