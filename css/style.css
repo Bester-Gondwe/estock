@@ -1,0 +1,274 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+:root {
+    --dark-blue: #003F62;
+    --bg-color: #E7E7E3;
+    --dark-color: #000000;
+    --white-color: #FAFAFA;
+}
+
+.container {
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    display: flex;
+}
+
+/* .d-gridx2 {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+} */
+
+.d-flex {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+
+
+
+
+.sidebar {
+    background-color: var(--white-color);
+    border: 1px solid rgba(23, 23, 21, 0.2);
+    /* padding: 1rem; */
+    width: 250px;
+    height: 100vh;
+    /* float: left; */
+}
+
+.sidebar__header {
+    height: 86px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar__header-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.sidebar__brand-text {
+    color: var(--dark-blue);
+    font-weight: bold;
+    font-size: 2em;
+
+}
+
+.sidebar__brand-img {
+    width: 24px;
+    height: 24px;
+}
+
+.sidebar-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-weight: bold;
+    color: #000000;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+
+.sidebar-nav__items {
+    list-style: none;
+    width: 100%;
+}
+
+.sidebar-nav__item {
+    width: 100%;
+    margin-top: 6px;
+    border-radius: 8px;
+}
+
+.sidebar-nav__item:hover {
+    background-color: var(--dark-blue);
+    cursor: pointer;
+}
+
+.sidebar-nav__link {
+    color: var(--dark-color);
+    padding: 16px 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+}
+
+.sidebar-nav__item.active {
+    background-color: var(--dark-blue);
+}
+
+
+
+.sidebar-nav__icon {
+    width: 24px;
+    height: 24px;
+}
+
+.main-content {
+    /* float: left; */
+    flex-grow: 1;
+}
+
+.content {
+    padding: 0.5rem 1rem;
+}
+
+.dashboard-header {
+    position: relative;
+    height: 60px;
+    background-color: var(--white-color);
+    border: 1px solid rgba(23, 23, 21, 0.2);
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    justify-content: end;
+    padding-inline: 60px;
+}
+
+.profile-btn {
+    border: 1px solid black;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 1em;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.profile-btn__text {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.dashboard-header {
+    position: relative;
+    height: 60px;
+    background-color: var(--white-color);
+    border: 1px solid rgba(23, 23, 21, 0.2);
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    justify-content: end;
+    padding-inline: 60px;
+}
+
+
+.form-wrapper {
+    width: 430px;
+    background-color: var(--white-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, .1), 0px 8px 16px rgba(0, 0, 0, .1);
+}
+
+.form-header {
+    text-align: center;
+}
+
+.input-box {
+    margin-top: 18px;
+}
+
+/* .input-box__label {
+    margin-bottom: 89px;
+} */
+
+.input-box__field {
+    margin-top: 6px;
+    width: 100%;
+    padding: 14px 10px;
+    font-size: 16px;
+    border-radius: 8px;
+
+    background-color: transparent;
+    border: 1px solid black;
+}
+
+.login-form-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0 24px 0;
+}
+
+.btn {
+    border-radius: 8px;
+    border: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    width: 100%;
+    padding: 14px 10px;
+}
+
+.btn-wrapper {
+    margin-top: 18px;
+}
+
+.btn-dark {
+    background-color: var(--dark-blue);
+    color: var(--white-color);
+}
+
+.new-account-text {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.new-account-link {
+    text-decoration: none;
+}
+
+.fullname-field {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.account-type-field-label {
+    opacity: 0.5;
+}
+
+.account-types {
+    display: flex;
+    gap: 10px;
+}
+
+.popup-menu {
+    visibility: hidden;
+    padding: 10px;
+    border-radius: 5px;
+    position: absolute;
+    width: 85px;
+    top: 88px;
+    right: 64px;
+    display: inline;
+    background-color: var(--white-color);
+    text-align: center;
+}
+
+.popup-menu__link {
+    text-decoration: none;
+}
+
+.popup-menu.show {
+    visibility: visible;
+}

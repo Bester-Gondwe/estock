@@ -1,0 +1,103 @@
+.products__topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.product-details {
+    padding: 10px;
+    background-color: white;
+    border-radius: 16px;
+}
+
+.product-form {
+    display: flex;
+    flex-direction: column;
+    height: 550px;
+}
+
+.product-form__ctrls {
+    display: flex;
+    justify-content: end;
+    gap: 8px;
+}
+
+.product-form__btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+}
+
+.product-details-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    flex-grow: 1;
+}
+
+
+
+.preview-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.preview-item {
+    padding: 6px;
+    background-color: #FAFAFA;
+}
+
+.preview-item__img {
+    width: 150px;
+    height: 150px;
+    border-radius: 6px;
+    object-fit: contain;
+}
+
+.preview-item__delete-btn {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    position: absolute;
+    visibility: hidden;
+    top: 0;
+    right: 0;
+}
+
+.preview-item__delete-btn.active {
+    visibility: visible;
+}
+
+.preview-item__img-wrapper {
+    position: relative;
+}
+
+.preview-item__container {
+    display: flex;
+    gap: 8px;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+.product-form__file-input {
+    width: 100%;
+    background: #fff;
+    border-radius: 5px;
+    padding: 30px;
+    box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.05);
+    height: 30px;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 5px;
+    border: 2px dashed #6990F2;
+}
+
+.product-form__file-input:disabled {
+    cursor: not-allowed;
+}
