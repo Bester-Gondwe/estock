@@ -27,7 +27,7 @@ $tableRow = '';
                 </table>
                 <?php
                 if (isset($_SESSION['user_id'])) {
-                    echo "<button id='paypal-button'>Proceed</button>";
+                    echo "<button id='paypal-button' onclick='proceedOrder()'>Proceed</button>";
                 } else {
                     echo "<h4>You need to <a href='login.php'>Login</a> to checkout.</h4>";
                 }
@@ -37,6 +37,19 @@ $tableRow = '';
     </div>
     <script src="js/main.js"></script>
     <script>
+        function proceedOrder() {
+            fetch("process_order.php", {
+                    method: "POST",
+                }).then(response => response.text())
+                .then(data => {
+                    if (data === "error") {
+                        alert("Failed to delete product from cart.");
+                    } else {
+                        console.log(data)
+                    }
+                })
+        }
+
         function getDetails() {
             fetch('cart_details.php')
                 .then(response => response.text())
@@ -45,10 +58,6 @@ $tableRow = '';
                 })
         }
         getDetails();
-
-        // document.querySelector("#quantityField").addEventListener('change', function() {
-        //     console.log('change');
-        // })
 
         function deleteFromCart(productId) {
             const formData = new FormData();
@@ -62,10 +71,30 @@ $tableRow = '';
                         alert("Failed to delete product from cart.");
                     } else {
                         document.querySelector("#cartCount").innerHTML = data; // update cart
+                        getDetails();
                     }
-                    getDetails();
+
                 })
         }
+
+        document.addEventListener('change', function(event) {
+            // check the input that have changed
+            if (event.target.tagName.toLowerCase() === 'input') {
+                if (event.target.id == "quantityField") {
+                    const updateFormData = new FormData();
+                    updateFormData.append('productID', event.target.dataset.id)
+                    updateFormData.append('quantity', event.target.value);
+
+                    fetch('update_cart.php', {
+                        method: "POST",
+                        body: updateFormData
+                    }).then(response => response.text()).then(data => {
+                        console.log(data);
+                    })
+                    getDetails();
+                }
+            }
+        }, true); // 'true' makes this capture the event during the capturing phase
     </script>
 </body>
 

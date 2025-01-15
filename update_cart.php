@@ -1,19 +1,11 @@
 <?php
 session_start();
 
+$productID = $_POST['productID'];
+$quantity = $_POST['quantity'];
 
-
-$output = array('error' => false);
-
-$id = $_POST['id'];
-$qty = $_POST['qty'];
-
-
-foreach ($_SESSION['cart'] as $key => $row) {
-    if ($row['productid'] == $id) {
-        $_SESSION['cart'][$key]['quantity'] = $qty;
-        $output['message'] = 'Updated';
+foreach ($_SESSION['cart'] as $key => $item) {
+    if ($item['productID'] == $productID) {
+        $_SESSION['cart'][$key]['quantity'] = $quantity;
     }
 }
-
-echo json_encode($output);

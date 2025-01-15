@@ -8,8 +8,8 @@ if (count($_SESSION['cart']) != 0 || isset($_SESSION['cart'])) {
     $total = 0;
     $product = new Product();
     foreach ($_SESSION['cart'] as $index => $item) {
-        $cartProduct = $product->getProductById($item['product_id']);
-        $subtotal = $cartProduct['product_price'];
+        $cartProduct = $product->getProductById($item['productID']);
+        $subtotal = $cartProduct['product_price'] * $item['quantity'];
         $total += $subtotal;
 
         $output .=  "<tr>
@@ -18,7 +18,7 @@ if (count($_SESSION['cart']) != 0 || isset($_SESSION['cart'])) {
         <td>" . $cartProduct['product_name'] . "</td>
         <td>&#36; " . number_format($cartProduct['product_price'], 2) . "</td>
         <td>
-           <input id='quantityField' class='input-box__field' type='number' value='" . $item['quantity'] . "' min='0'/>
+           <input data-id='" . $cartProduct['product_id'] . "' id='quantityField' class='input-box__field' type='number' value='" . $item['quantity'] . "' min='0'/>
         </td>
         </td><td>&#36; " . number_format($subtotal, 2) . "</td>
     </tr>";

@@ -5,7 +5,7 @@ class Order extends Database
 {
 
     private $ordersTable = 'orders';
-    private $orderItemsTable = 'order_items';
+    private $orderItemsTable = 'order_details';
 
     public function __construct()
     {
@@ -15,16 +15,16 @@ class Order extends Database
     // Create a new order
     public function createOrder($user_id)
     {
-        $query = "INSERT INTO $this->ordersTable (user_id) VALUES (:user_id)";
+        $query = "INSERT INTO $this->ordersTable (user_id,order_status) VALUES (:user_id,'Pending')";
         $this->executeQuery($query, ['user_id' => $user_id]);
         return $this->conn->lastInsertId();
     }
 
     // Add products to an order
-    public function addProductToOrder($order_id, $product_id)
+    public function addProductToOrder($order_id, $product_id,$quantity)
     {
-        $query = "INSERT INTO $this->orderItemsTable (order_id,product_id) VALUES (:order_id,:product_id)";
-        $this->executeQuery($query, ['order_id' => $order_id, 'product_id' => $product_id]);
+        $query = "INSERT INTO $this->orderItemsTable (order_id,product_id,quantity) VALUES (:order_id,:product_id,:quantity)";
+        $this->executeQuery($query, ['order_id' => $order_id, 'product_id' => $product_id,'quantity' => $quantity]);
     }
 
     // Fetch orders by customer

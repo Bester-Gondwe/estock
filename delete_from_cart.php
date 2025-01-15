@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Find the product in the cart and remove it
         foreach ($_SESSION['cart'] as $index => $item) {
-            if ($item['product_id'] === $productId) {
+            if ($item['productID'] === $productId) {
                 unset($_SESSION['cart'][$index]); // Remove the item
                 $_SESSION['cart'] = array_values($_SESSION['cart']); // Reindex array
                 echo count($_SESSION['cart']);
