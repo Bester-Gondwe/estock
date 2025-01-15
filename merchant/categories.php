@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once "../models/Order.php";
+require_once "../models/Category.php";
 
 $category = new Category();
 

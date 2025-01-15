@@ -86,7 +86,7 @@ class Product extends Database
         LEFT JOIN product_images ON products.product_id = product_images.product_id 
         AND product_images.is_primary=1
         WHERE users.user_id = :user_id ORDER BY products.created_at DESC";
-        
+
         $params = ['user_id' => $user_id];
         $stmt = $this->executeQuery($query, $params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -143,5 +143,12 @@ class Product extends Database
         $query = "SELECT COUNT(*) AS total FROM {$this->products_table}";
         $stmt = $this->executeQuery($query, null);
         return $stmt->fetch()['total'];
+    }
+
+    public function getProductsByCategory($categoryName)
+    {
+        $query = "SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE categories.category_name =:category_name ORDER BY created_at ASC ";
+        $stmt = $this->executeQuery($query, ['category_name' => $categoryName]);
+        return $stmt->fetchAll();
     }
 }
