@@ -64,21 +64,6 @@ class Order extends Database
         return  $this->executeQuery($query, ['order_id' => $order_id, 'order_status' => $order_status]);
     }
 
-    // cancel order
-    public function cancelOrder($order_id)
-    {
-        $query = "UPDATE {$this->ordersTable} SET order_status = 'cancelled' WHERE order_id = :order_id";
-        $this->executeQuery($query, ['order_id' => $order_id]);
-    }
-
-    // get all orders
-    public function getAllOrders()
-    {
-        $query = "SELECT * FROM {$this->ordersTable} ORDER BY created_at DESC";
-        $stmt = $this->executeQuery($query, null);
-        return $stmt->fetchAll();
-    }
-
     // get paginated orders
     public function getOrdersPaginated($userId, $offset, $limit)
     {
@@ -115,29 +100,29 @@ class Order extends Database
     }
 
 
-    public function calculateOrderTotal($order_id)
-    {
-        $query = "SELECT SUM(oi.quantity * oi.price) AS total 
-              FROM {$this->orderItemsTable} oi 
-              WHERE oi.order_id = :order_id";
-        $stmt = $this->executeQuery($query, ['order_id' => $order_id]);
-        return $stmt->fetch()['total'];
-    }
+    // public function calculateOrderTotal($order_id)
+    // {
+    //     $query = "SELECT SUM(oi.quantity * oi.price) AS total 
+    //           FROM {$this->orderItemsTable} oi 
+    //           WHERE oi.order_id = :order_id";
+    //     $stmt = $this->executeQuery($query, ['order_id' => $order_id]);
+    //     return $stmt->fetch()['total'];
+    // }
 
     // update order item
-    public function updateOrderItem($order_id, $product_id, $quantity, $price)
-    {
-        $query = "UPDATE {$this->orderItemsTable} 
-              SET quantity = :quantity, price = :price 
-              WHERE order_id = :order_id AND product_id = :product_id";
-        $params = [
-            'order_id' => $order_id,
-            'product_id' => $product_id,
-            'quantity' => $quantity,
-            'price' => $price
-        ];
-        $this->executeQuery($query, $params);
-    }
+    // public function updateOrderItem($order_id, $product_id, $quantity, $price)
+    // {
+    //     $query = "UPDATE {$this->orderItemsTable} 
+    //           SET quantity = :quantity, price = :price 
+    //           WHERE order_id = :order_id AND product_id = :product_id";
+    //     $params = [
+    //         'order_id' => $order_id,
+    //         'product_id' => $product_id,
+    //         'quantity' => $quantity,
+    //         'price' => $price
+    //     ];
+    //     $this->executeQuery($query, $params);
+    // }
 
 
     public function countOrderForMerchant($user_id)

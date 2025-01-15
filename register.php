@@ -35,7 +35,7 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
-    <div class="container login-container">
+    <div class="wrapper login-container">
         <div class="form-wrapper">
             <form action="" method="post">
                 <h1 class="form-header">Sign up</h1>
@@ -78,7 +78,7 @@ if (isset($_POST['submit'])) {
                 </div>
 
                 <div class="btn-wrapper">
-                    <button class="btn btn-dark" type="submit" name="submit">
+                    <button class="btn btn-dark btn-100" type="submit" name="submit">
                         Sign Up
                     </button>
                 </div>

@@ -148,16 +148,22 @@ fileInput.addEventListener("change", function (e) {
 
     const files = Array.from(e.target.files);
     const remainingImages = 4 - productImagesCount;
-    if (remainingImages > 0) {
-        for (let i = 0; i < remainingImages; i++) {
-            newImages.push(files[i]);
-            productImagesCount++;
-        }
-        console.log(productImagesCount)
-        if (productImagesCount == 4)
-            productFormFileInput.disabled = true;
-        renderPreviews();
+    let i = 0;
+    for (; i < remainingImages; i++) {
+        newImages.push(files[i]);
+        productImagesCount++;
     }
+    renderPreviews();
+    // if (remainingImages > 0) {
+    //     for (let i = 0; i < remainingImages; i++) {
+    //         
+    //         productImagesCount++;
+    //     }
+    //  
+    //     if (productImagesCount == 4)
+    //         productFormFileInput.disabled = true;
+    //     
+    // }
 
     // reset file input
     fileInput.value = "";
@@ -304,6 +310,7 @@ function renderPreviews() {
         reader.onload = () => {
             createPreviewItem(reader.result, false, index);
         };
+        console.log(file);
         reader.readAsDataURL(file);
     });
 }

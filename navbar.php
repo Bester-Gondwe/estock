@@ -45,7 +45,7 @@
                         <span class="dropdown-toggle user-profile" ><?php echo $_SESSION['first_name'] . ' ' . $_SESSION['last_name'] ?></span>
                         <ul class="dropdown-menu">
                             <li class="user-footer">
-                                <a href="logout.php" class="nav__link">Sign out</a>
+                                <a href="logout.php">Sign out</a>
                             </li>
                         </ul>
                     </li>

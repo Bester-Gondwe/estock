@@ -58,7 +58,7 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
-    <div class="container login-container">
+    <div class="wrapper login-container">
         <div class="form-wrapper">
             <form action="" method="post">
                 <h1 class="form-header">Sign in</h1>
@@ -70,15 +70,9 @@ if (isset($_POST['submit'])) {
                     <input class="input-box__field" type="password" placeholder="Password" name="password" id="password">
                 </div>
                 <div class="login-form-bottom">
-                    <div>
-                        <input type="checkbox" name="keepLoggedCheck" id="keepLoggedCheck" value="yes">
-                        <label for="keepLoggedCheck">Keep me logged in</label>
-                    </div>
                     <a href="">Forgot your password</a>
                 </div>
-                <button class="btn btn-dark" type="submit" name="submit">
-                    Login
-                </button>
+                <button class="btn btn-dark btn-100" type="submit" name="submit">Login</button>
             </form>
             <p class="new-account-text">
                 New to eStock? <a class="new-account-link" href="register.php">Sign up</a>

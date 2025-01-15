@@ -14,7 +14,7 @@ $page = isset($_GET['p']) ? basename($_GET['p']) : 'home';
 
 <!DOCTYPE html>
 <html lang="en">
-<?php include '../header.php' ?>
+<?php include 'header.php' ?>
 
 <body>
     <div class="container d-gridx2">
