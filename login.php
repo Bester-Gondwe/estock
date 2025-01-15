@@ -6,8 +6,7 @@ if (isset($_SESSION['user_id'])) {
     if ($_SESSION['user_role'] == "Merchant") {
         header("Location: merchant/");
     } else {
-        header("Location: index.php");
-  
+        header("Location: ./");
     }
     exit;
 }
@@ -20,9 +19,10 @@ if (isset($_POST['submit'])) {
             $user = new User();
             $loggedInUser = $user->login($email, $password);
             // Store user information in the session
-          
+
             $_SESSION['user_id'] = $loggedInUser['user_id'];
             $_SESSION['first_name'] = $loggedInUser['first_name'];
+            $_SESSION['last_name'] = $loggedInUser['last_name'];
             $_SESSION['email'] = $loggedInUser['email'];
             $_SESSION['user_role'] = $user->getUserRoles($loggedInUser['user_id'])['role_name'];
 

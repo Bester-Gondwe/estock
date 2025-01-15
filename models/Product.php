@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../connection.php';
-require_once "../models/Category.php";
+require_once __DIR__ . '/../models/Category.php';
+
 
 class Product extends Database
 {
@@ -147,7 +148,19 @@ class Product extends Database
 
     public function getProductsByCategory($categoryName)
     {
-        $query = "SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE categories.category_name =:category_name ORDER BY created_at ASC ";
+
+        $query = "SELECT 
+        products.product_id,
+        products.product_name, 
+        products.product_price, 
+        products.product_description,
+        categories.category_name,
+        product_images.file_name AS primary_image 
+        FROM products JOIN categories ON products.category_id = categories.category_id
+        LEFT JOIN product_images ON products.product_id = product_images.product_id 
+        AND product_images.is_primary=1
+        WHERE categories.category_name =:category_name ORDER BY products.created_at DESC";
+
         $stmt = $this->executeQuery($query, ['category_name' => $categoryName]);
         return $stmt->fetchAll();
     }
