@@ -17,7 +17,7 @@ if (isset($_SESSION['user_id'])) {
             // echo json_encode();
             echo "getting category by id";
         } else {
-            echo json_encode($category->getAllCategories($_SESSION['user_id']));
+            echo json_encode($category->countMerchantCategories($_SESSION['user_id']));
         }
     } elseif ($method === 'POST') {
         $action = $_POST['action'] ?? null;

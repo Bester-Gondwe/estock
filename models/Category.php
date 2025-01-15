@@ -29,14 +29,21 @@ class Category extends Database
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getAllCategories($userID)
+    public function getAllCategories()
+    {
+        $query = "SELECT * FROM categories";
+        $stmt = $this->executeQuery($query);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function countMerchantCategories($userID)
     {
         // $query = "SELECT * FROM $this->category_table";
         $query = "SELECT categories.category_id, categories.category_name, COUNT(products.product_id) as numberOfProducts
         FROM categories
 LEFT JOIN products ON products.category_id = categories.category_id AND products.user_id=:user_id
 GROUP BY categories.category_id";
-        $stmt = $this->executeQuery($query, ['user_id' =>$userID]);
+        $stmt = $this->executeQuery($query, ['user_id' => $userID]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
