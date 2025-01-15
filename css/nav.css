@@ -18,6 +18,8 @@
     padding: 10px 10vw;
     display: flex;
     justify-content: space-between;
+    color: white;
+    text-decoration: none;
 }
 
 .brand-logo{
@@ -26,8 +28,9 @@
 
 .nav-items{
     display: flex;
+    color: white;
     align-items: center;
-
+text-decoration: none;
 }
 
 .search{
@@ -66,11 +69,14 @@
 }
 
 .nav-items a{
+    text-decoration: none;
     margin-left: 20px;
+    color: white;
 }
 
 .nav-items a img{
     width: 30px;
+
 }
 
 .links-container{
@@ -87,7 +93,7 @@
     padding: 0 10px;
     margin: 0 5px;
     text-decoration: none;
-    color: #383838;
+    color: #ede8e8;
     opacity: 0.5;
     transition: .5s;
 }
