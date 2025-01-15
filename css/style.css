@@ -296,3 +296,40 @@
     transition: background-color 0.3s ease;
     text-transform: capitalize;
 }
+
+
+.table__wrapper {
+    min-height: 424px;
+    border-radius: 16px;
+    padding: 16px 24px;
+    background-color: white;
+    margin-bottom: 8px;
+}
+
+table {
+    border-spacing: 0 10px;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+
+.cart-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-content {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-container {
+    width: 80%;
+}
+
+.cart-footer {
+    display: flex;
+    justify-content: end;
+}

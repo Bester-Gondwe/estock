@@ -8,30 +8,33 @@ $tableRow = '';
 <?php include "header.php" ?>
 
 <body>
-    <div class="wrapper">
+    <div class="wrapper cart-wrapper">
         <?php include 'navbar.php' ?>
-        <div class="content-wrapper">
-            <div class="container">
-                <h1>Your Cart</h1>
-                <table>
-                    <thead>
-                        <th></th>
-                        <th>Photo</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th width="10%">Quantity</th>
-                        <th>Subtotal</th>
-                    </thead>
-                    <tbody id="tbody">
-                    </tbody>
-                </table>
-                <?php
-                if (isset($_SESSION['user_id'])) {
-                    echo "<button class='btn' id='paypal-button' onclick='proceedOrder()'>Proceed</button>";
-                } else {
-                    echo "<h4>You need to <a href='login.php'>Login</a> to checkout.</h4>";
-                }
-                ?>
+        <div class="cart-content">
+            <div class="container cart-container">
+                <div class="table__wrapper">
+                    <h4 class="table-title">Your Cart</h4>
+                    <table>
+                        <thead>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th width="10%">Quantity</th>
+                            <th>Subtotal</th>
+                        </thead>
+                        <tbody id="tbody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="cart-footer">
+                    <?php
+                    if (isset($_SESSION['user_id'])) {
+                        echo "<button class='btn' id='paypal-button' onclick='proceedOrder()'>Proceed</button>";
+                    } else {
+                        echo "<h4>You need to <a href='login.php'>Login</a> to checkout.</h4>";
+                    }
+                    ?>
+                </div>
             </div>
         </div>
     </div>

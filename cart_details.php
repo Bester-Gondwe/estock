@@ -4,7 +4,7 @@ require_once "models/Product.php";
 
 $output = '';
 
-if (count($_SESSION['cart']) != 0 || isset($_SESSION['cart'])) {
+if (isset($_SESSION['cart']) && count($_SESSION['cart']) != 0) {
     $total = 0;
     $product = new Product();
     foreach ($_SESSION['cart'] as $index => $item) {
@@ -13,8 +13,7 @@ if (count($_SESSION['cart']) != 0 || isset($_SESSION['cart'])) {
         $total += $subtotal;
 
         $output .=  "<tr>
-        <td><button type='button' onclick='deleteFromCart(" . $cartProduct['product_id'] . ")' class='cart_delete'>X</button></td> 
-         <td><img src='uploads/" . $cartProduct['primary_image'] . "' width='80px' height='80px'></td>   
+        <td><button type='button' onclick='deleteFromCart(" . $cartProduct['product_id'] . ")' class='cart_delete'>X</button></td>  
         <td>" . $cartProduct['product_name'] . "</td>
         <td>&#36; " . number_format($cartProduct['product_price'], 2) . "</td>
         <td>
