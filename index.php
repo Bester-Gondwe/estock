@@ -8,7 +8,7 @@ $category = new Category();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>eStock</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/dropdown.less">
 </head>
@@ -23,9 +23,9 @@ $category = new Category();
           <li class="nav__item"><a class="nav__link" href="">About Us</a></li>
           <li class="nav__item"><a class="nav__link" href="">Contact Us</a></li>
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle nav__link" data-toggle="dropdown">Category <span
+            <a href="#" class="dropdown-toggle nav__link">Category <span
                 class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
+            <ul class="dropdown-menu">
               <?php
               foreach ($category->getAllCategories() as $catg) {
                 echo "
@@ -87,7 +87,41 @@ $category = new Category();
       <?php } ?>
     </div>
   </header>
-  <script src="assests/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script>
+    // Close all dropdowns on page shows
+    window.addEventListener('pageshow', function() {
+      document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        menu.classList.remove('show');
+      });
+    });
+
+    // Toggle dropdown on click
+    document.querySelectorAll('.dropdown-toggle').forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // Close other open dropdowns
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+          if (menu !== this.nextElementSibling) {
+            menu.classList.remove('show');
+          }
+        });
+
+        // Toggle current dropdown
+        const menu = this.nextElementSibling;
+        menu.classList.toggle('show');
+      });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+        if (!menu.contains(event.target) && !menu.previousElementSibling.contains(event.target)) {
+          menu.classList.remove('show');
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>
