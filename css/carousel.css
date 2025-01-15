@@ -1,0 +1,56 @@
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #1c546c, #feb47b);
+            
+            color: white;
+           
+        }
+
+       
+
+        .container1 {
+            text-align: center;
+            margin-top: 150px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-out;
+        }
+
+        p {
+          margin: 0;
+            font-size: 1.5rem;
+            animation: fadeIn 3s ease-out;
+        }
+
+        .cta-button {
+            background-color: #feb47b;
+            color: #fff;
+            margin-top: 15px;
+            font-size: 1.2rem;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            margin-top: 30px;
+        }
+
+        .cta-button:hover {
+            background-color: #ff7e5f;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    

@@ -16,6 +16,7 @@
 
 .nav {
     padding: 10px 10vw;
+    gap: 30px;
     display: flex;
     justify-content: space-between;
     color: white;
@@ -29,6 +30,7 @@
 .nav-items{
     display: flex;
     color: white;
+    gap: 40px;
     align-items: center;
 text-decoration: none;
 }
@@ -71,6 +73,7 @@ text-decoration: none;
 .nav-items a{
     text-decoration: none;
     margin-left: 20px;
+    gap: 30px;
     color: white;
 }
 

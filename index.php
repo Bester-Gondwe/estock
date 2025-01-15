@@ -8,8 +8,17 @@ $category = new Category();
 <?php include 'header.php' ?>
 
 <body>
-  <?php include "navbar.php" ?>
+    <?php include "navbar.php" ?>
+ 
   <script src="js/main.js"></script>
+    <div class="container1">
+        <h1>Welcome to Our Store</h1>
+        <p>Discover amazing products and services designed for you.</p>
+        <a href="#" class="cta-button">Shop Now</a>
+    </div>
+
+   
+  
 </body>
 
 </html>

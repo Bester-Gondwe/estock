@@ -100,9 +100,9 @@ $page = isset($_GET['p']) ? basename($_GET['p']) : 'home';
             </div>
         </div>
     </div>
-    <div id="msgBox" class="msg-box-wrapper error">
+    <!-- <div id="msgBox" class="msg-box-wrapper error">
         <p>product saved sucessfully</p>
-    </div>
+    </div> -->
     <script src="js/main.js"></script>
 </body>
 
