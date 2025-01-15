@@ -61,6 +61,12 @@
     position: relative;
 }
 
+.user-profile {
+    color: var(--white-color);
+    font-weight: bold;
+    cursor: pointer;
+}
+
 .cart_count {
     position: absolute;
     top: 0px;

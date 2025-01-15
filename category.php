@@ -48,16 +48,6 @@ $filteredProducts = $product->getProductsByCategory($categorySlug);
 			</div>
 		</div>
 	</div>
-	<script src="js/main.js"></script>
-	<script>
-		function goToCart() {
-			<?php if (!$userLoggedIn): ?>
-				document.getElementById('cartPopup').style.display = 'block';
-			<?php else: ?>
-				window.location.href = 'cart.php';
-			<?php endif; ?>
-		}
-	</script>
 
 	<script>
 		function addToCart(productId) {
@@ -74,20 +64,10 @@ $filteredProducts = $product->getProductsByCategory($categorySlug);
 					} else {
 						document.querySelector("#cartCount").innerHTML = data; // update cart
 					}
-					console.log(data);
 				})
 		}
-
-		function requireLogin(event) {
-			event.preventDefault();
-			alert("You must log in to proceed to checkout.");
-			window.location.href = 'login.php';
-		}
-
-		function goToCart() {
-			window.location.href = 'cart.php';
-		}
 	</script>
+	<script src="js/main.js"></script>
 </body>
 
 </html>

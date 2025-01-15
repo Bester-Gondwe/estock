@@ -6,9 +6,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     if (isset($_POST['productID'])) {
         $productId = (int) $_POST['productID'];
-        // Add product to the cart
-        $_SESSION['cart'][] = ['product_id' => $productId];
-        echo count($_SESSION['cart']);
+
+        // Check if the product is already in the cart
+        $productExists = false;
+        foreach ($_SESSION['cart'] as $item) {
+            if ($item['product_id'] === $productId) {
+                $productExists = true;
+                break;
+            }
+        }
+
+        if (!$productExists) {
+            // Add product to the cart
+            $_SESSION['cart'][] = ['product_id' => $productId, 'quantity' => 1];
+            echo count($_SESSION['cart']);
+        } else {
+            echo count($_SESSION['cart']);
+        }
     } else {
         echo "error";
     }

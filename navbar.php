@@ -3,9 +3,9 @@
         <a class="main-header__brand" href="">eStore</a>
         <nav class="nav">
             <ul class="nav__list">
-                <li class="nav__item"><a class="nav__link" href="">Home</a></li>
-                <li class="nav__item"><a class="nav__link" href="">About Us</a></li>
-                <li class="nav__item"><a class="nav__link" href="">Contact Us</a></li>
+                <li class="nav__item"><a class="nav__link" href="./">Home</a></li>
+                <li class="nav__item"><a class="nav__link" href="#">About Us</a></li>
+                <li class="nav__item"><a class="nav__link" href="#">Contact Us</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle nav__link">Category <span
                             class="caret"></span></a>
@@ -36,13 +36,13 @@
                     <ul class="dropdown-menu">
                         <ul class="menu" id="cart_menu">
                         </ul>
-                        <li class="footer"><a href="cart_view.php">Go to Cart</a></li>
+                        <li class="footer"><a href="cart.php">Go to Cart</a></li>
                     </ul>
                 </li>
 
                 <?php if (isset($_SESSION['user_id'])) { ?>
                     <li class="dropdown">
-                        <span class="dropdown-toggle"><?php echo $_SESSION['first_name'] . ' ' . $_SESSION['last_name'] ?></span>
+                        <span class="dropdown-toggle user-profile" ><?php echo $_SESSION['first_name'] . ' ' . $_SESSION['last_name'] ?></span>
                         <ul class="dropdown-menu">
                             <li class="user-footer">
                                 <a href="logout.php" class="nav__link">Sign out</a>

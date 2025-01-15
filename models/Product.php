@@ -44,7 +44,15 @@ class Product extends Database
     // get product by id
     public function getProductById($product_id)
     {
-        $query = "SELECT * FROM $this->products_table JOIN categories ON $this->products_table.category_id=categories.category_id WHERE product_id=:product_id";
+        $query = "SELECT  products.product_id,
+        products.product_name, 
+        products.product_price, 
+        products.product_description,
+        categories.category_name,
+        product_images.file_name AS primary_image 
+        FROM products JOIN categories ON $this->products_table.category_id=categories.category_id
+        LEFT JOIN product_images ON products.product_id = product_images.product_id 
+        AND product_images.is_primary=1 WHERE products.product_id=:product_id";
         $params = ['product_id' => $product_id];
         $stmt = $this->executeQuery($query, $params);
         return $stmt->fetch(PDO::FETCH_ASSOC);
