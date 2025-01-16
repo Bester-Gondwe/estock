@@ -24,8 +24,8 @@ $tableRow = '';
                             <th width="10%">Quantity</th>
                             <th>Subtotal</th>
                         </thead>
-                        <tbody id="tbody">
-                        </tbody>
+                        <tbody class="cart-table__body" id="tbody">                        </tbody>
+
                     </table>
                 </div>
                 <div class="cart-footer">
