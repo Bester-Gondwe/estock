@@ -8,6 +8,7 @@ if (!isset($_SESSION['cart'])) {
 require_once 'models/Product.php';
 
 $filteredProducts = [];
+$categorySlug = null;
 $product = new Product();
 if (isset($_GET['category'])) {
 	$categorySlug = $_GET['category'];
@@ -34,7 +35,7 @@ if (isset($_GET['category'])) {
 			<div class="container">
 				<!-- Main content -->
 				<section class="products">
-					<h1 class="page-header"><?php echo $categorySlug ?></h1>
+					<h1 class="page-header"><?php echo $categorySlug == null ? "All" : $categorySlug  ?></h1>
 					<div class="products-container">
 						<?php foreach ($filteredProducts as $filteredProduct): ?>
 							<div class="product-card">
