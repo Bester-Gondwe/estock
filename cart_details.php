@@ -19,14 +19,20 @@ if (isset($_SESSION['cart']) && count($_SESSION['cart']) != 0) {
         <td>
            <input data-id='" . $cartProduct['product_id'] . "' id='quantityField' class='input-box__field' type='number' value='" . $item['quantity'] . "' min='0'/>
         </td>
-        </td><td>&#36; " . number_format($subtotal, 2) . "</td>
+        <td>&#36; " . number_format($subtotal, 2) . "</td>
     </tr>";
     }
 
-    $output .= "<tfoot><td>helo</td></tfoot>";
-    // $output .= "<tr><td colspan='5' align='end'><b>Total</b></td><td><b>&#36; " . number_format($total, 2) . "</b></td><tr>";
+    // Adding total to footer row
+    $output .= "<tfoot>
+                <tr>
+                    <td colspan='4' align='right'><b>Total</b></td>
+                    <td><b>&#36; " . number_format($total, 2) . "</b></td>
+                </tr>
+                </tfoot>";
 } else {
-    $output .= "<tr><td colspan='5' align='center'>Shopping cart empty</td><tr>";
+    $output .= "<tr><td colspan='5' align='center'>Shopping cart empty</td></tr>";
 }
 
 echo  $output;
+?>

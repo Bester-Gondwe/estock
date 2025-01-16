@@ -441,3 +441,35 @@ table {
     align-items: center;
     justify-content: center;
 }
+
+.table-container {
+    max-height: 400px; /* Define your desired height */
+    overflow-y: auto; /* Make table body scrollable */
+    display: block;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+}
+
+tfoot {
+    position: sticky;
+    bottom: 0;
+    background-color: #f8f8f8;
+    font-weight: bold;
+}
+
+tfoot td {
+    text-align: right;
+}
+
+tfoot td:last-child {
+    text-align: center;
+}
