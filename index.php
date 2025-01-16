@@ -1,27 +1,27 @@
 <?php
 session_start();
-require_once "models/Category.php";
-$category = new Category();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-<?php include 'header.php' ?>
+
+<head>
+  <?php include 'header.php' ?>
+</head>
 
 <body>
-    <?php include "navbar.php" ?>
- 
-  <script src="js/main.js"></script>
-    <div class="container1">
-        <h1>Welcome to Our Store</h1>
-        <p>Discover amazing products and services designed for you.</p>
-        <div class="cta-button">
-          <a href="#" class="cta-button">Shop Now</a>
-        </div>
-        
+  <?php include "navbar.php" ?>
+  <div class="wrapper login-container">
+    <div class="success-content">
+      <h1>Welcome to Our Store</h1>
+      <p>Discover amazing products and services designed for you.</p>
+      <div class="cta-button">
+        <a href="#" class="cta-button">Shop Now</a>
+      </div>
     </div>
-
-   
-  
+  </div>
+  </div>
+  <script src="js/main.js"></script>
 </body>
 
 </html>
