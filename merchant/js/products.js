@@ -122,10 +122,10 @@ document.querySelector("#updateBtn").addEventListener('click', function (e) {
     })
         .then(response => response.text())
         .then(data => {
-            console.log(data);
+            alert(data)
         })
         .catch(error => {
-            console.log("error");
+            alert(error)
         });
 
     existingImages = [];

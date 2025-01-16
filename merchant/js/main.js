@@ -7,7 +7,7 @@ fetch("category_handler.php")
     .then(response => response.json())
     .then(data => {
         if (data) {
-            document.querySelector("#categoriesList").innerHTML =  data.map(renderCategoryItem).join('');
+            document.querySelector("#categoriesList").innerHTML = data.map(renderCategoryItem).join('');
             document.querySelectorAll(".categories-list__item").forEach(item => {
                 item.addEventListener('click', function () {
                     categoryForm.categoryId.value = item.dataset.id;
@@ -58,10 +58,11 @@ function deleteCategory(categoryID) {
         })
             .then(response => response.text())
             .then(data => {
-                console.log(data);
+                alert(data)
                 closeModal();
             })
             .catch(error => {
+                alert(error)
                 console.log("error");
             });
     }
@@ -85,10 +86,10 @@ document.querySelector("#categoryUpdateBtn").addEventListener('click', function 
     })
         .then(response => response.text())
         .then(data => {
-            console.log(data);
+            alert(data)
         })
         .catch(error => {
-            console.log(error);
+            alert(error)
         });
 });
 

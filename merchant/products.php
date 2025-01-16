@@ -27,7 +27,7 @@
                                 </div>
                                 <div class="input-box">
                                     <label class="input-box__label" for="">Product Descriprion</label>
-                                    <textarea class="input-box__field" rows="2" name="productDescription" id="productDescription" ></textarea>
+                                    <textarea class="input-box__field" rows="2" name="productDescription" id="productDescription"></textarea>
                                 </div>
                                 <div class="input-box">
                                     <label class="input-box__label" for="">Category</label>
@@ -37,11 +37,11 @@
                                 <div class="d-flex">
                                     <div class="input-box">
                                         <label class="input-box__label" for="">Stock Quantity</label>
-                                        <input class="input-box__field" type="number" name="stockQuantity" id="stockQuantity" >
+                                        <input class="input-box__field" type="number" name="stockQuantity" id="stockQuantity">
                                     </div>
                                     <div class="input-box">
                                         <label class="input-box__label" for="">Price</label>
-                                        <input class="input-box__field" type="number" name="productPrice" id="productPrice" >
+                                        <input class="input-box__field" type="number" name="productPrice" id="productPrice">
                                     </div>
                                 </div>
                             </div>
@@ -76,3 +76,10 @@
 </div>
 
 <script src="js/products.js"></script>
+<script>
+    if (document.querySelector("#productId").value) {
+        document.querySelector("#updateBtn").textContent = "SAVE";
+    } else {
+        document.querySelector("#updateBtn").textContent = "UPDATE";
+    }
+</script>

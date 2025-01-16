@@ -50,7 +50,7 @@ $tableRow = '';
                     if (data === "error") {
                         alert("Failed to delete product from cart.");
                     } else {
-                        console.log(data)
+                        alert(data)
                     }
                 })
         }
@@ -94,7 +94,7 @@ $tableRow = '';
                         method: "POST",
                         body: updateFormData
                     }).then(response => response.text()).then(data => {
-                        console.log(data);
+                       
                     })
                     getDetails();
                 }
