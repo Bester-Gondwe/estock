@@ -69,12 +69,18 @@ class Product extends Database
     // get all products
     public function getAllProducts()
     {
-        $query = "SELECT products.product_id,
+
+        $query = "SELECT 
+        products.product_id,
         products.product_name, 
         products.product_price, 
         products.product_description,
-        product_images.file_name AS primary_image  FROM $this->products_table 
-        FROM products ORDER BY products.created_at ASC";
+        categories.category_name,
+        product_images.file_name AS primary_image 
+        FROM products JOIN categories ON products.category_id = categories.category_id
+        LEFT JOIN product_images ON products.product_id = product_images.product_id 
+        AND product_images.is_primary=1 ORDER BY products.created_at DESC LIMIT 10";
+
         $stmt = $this->executeQuery($query, null);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

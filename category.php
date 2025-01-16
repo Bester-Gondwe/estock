@@ -7,11 +7,14 @@ if (!isset($_SESSION['cart'])) {
 
 require_once 'models/Product.php';
 
-$categorySlug = $_GET['category'];
+$filteredProducts = [];
 $product = new Product();
-
-$filteredProducts = $product->getProductsByCategory($categorySlug);
-
+if (isset($_GET['category'])) {
+	$categorySlug = $_GET['category'];
+	$filteredProducts = $product->getProductsByCategory($categorySlug);
+} else {
+	$filteredProducts = $product->getAllProducts();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
