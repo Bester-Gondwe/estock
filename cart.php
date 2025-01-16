@@ -6,6 +6,8 @@ $tableRow = '';
 <!DOCTYPE html>
 <html lang="en">
 <?php include "header.php" ?>
+<link rel="stylesheet" href="css/cart.css">
+
 
 <body>
     <div class="wrapper cart-wrapper">
@@ -23,6 +25,7 @@ $tableRow = '';
                             <th>Subtotal</th>
                         </thead>
                         <tbody id="tbody">
+                        <td colspan="4" align="right"><b>Total</b></td>
                         </tbody>
                     </table>
                 </div>

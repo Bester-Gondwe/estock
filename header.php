@@ -4,4 +4,5 @@
     <title>eStock</title>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/orders.css" />
+    <link rel="stylesheet" href="css/carousel.css" />
 </head>
