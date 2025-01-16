@@ -4,8 +4,7 @@
         <nav class="nav">
             <ul class="nav__list">
                 <li class="nav__item"><a class="nav__link" href="./">Home</a></li>
-                <li class="nav__item"><a class="nav__link" href="#">About Us</a></li>
-                <li class="nav__item"><a class="nav__link" href="#">Contact Us</a></li>
+               
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle nav__link">Category <span
                             class="caret"></span></a>

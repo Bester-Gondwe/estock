@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 require_once "../models/Order.php";
 
 $orders = new Order();
