@@ -1,122 +1,88 @@
-<?php include 'includes/session.php'; ?>
 <?php
-	$conn = $pdo->open();
+require_once 'models/Product.php';
+require_once 'models/ProductImage.php';
+session_start();
 
-	$slug = $_GET['product'];
+if (isset($_GET['id'])) {
+	$productID = $_GET['id'];
+	$productObj = new Product();
+	$product = $productObj->getProductById($productID);
+	$productImage = new ProductImage();
+	$productImages = $productImage->getProductImagesByProductId($productID);
+} else {
+	header("Location: ./");
+	exit;
+}
 
-	try{
-		 		
-	    $stmt = $conn->prepare("SELECT *, products.name AS prodname, category.name AS catname, products.id AS prodid FROM products LEFT JOIN category ON category.id=products.category_id WHERE slug = :slug");
-	    $stmt->execute(['slug' => $slug]);
-	    $product = $stmt->fetch();
-		
-	}
-	catch(PDOException $e){
-		echo "There is some problem in connection: " . $e->getMessage();
-	}
 
-	//page view
-	$now = date('Y-m-d');
-	if($product['date_view'] == $now){
-		$stmt = $conn->prepare("UPDATE products SET counter=counter+1 WHERE id=:id");
-		$stmt->execute(['id'=>$product['prodid']]);
-	}
-	else{
-		$stmt = $conn->prepare("UPDATE products SET counter=1, date_view=:now WHERE id=:id");
-		$stmt->execute(['id'=>$product['prodid'], 'now'=>$now]);
-	}
 
 ?>
-<?php include 'includes/header.php'; ?>
-<body class="hold-transition skin-blue layout-top-nav">
-<script>
-(function(d, s, id) {
-	var js, fjs = d.getElementsByTagName(s)[0];
-	if (d.getElementById(id)) return;
-	js = d.createElement(s); js.id = id;
-	js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12';
-	fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
-</script>
-<div class="wrapper">
+<?php include 'header.php'; ?>
 
-	<?php include 'includes/navbar.php'; ?>
-	 
-	  <div class="content-wrapper">
-	    <div class="container">
+<body>
+	<div class="wrapper">
+		<?php include 'navbar.php'; ?>
 
-	      <!-- Main content -->
-	      <section class="content">
-	        <div class="row">
-	        	<div class="col-sm-9">
-	        		<div class="callout" id="callout" style="display:none">
-	        			<button type="button" class="close"><span aria-hidden="true">&times;</span></button>
-	        			<span class="message"></span>
-	        		</div>
-		            <div class="row">
-		            	<div class="col-sm-6">
-		            		<img src="<?php echo (!empty($product['photo'])) ? 'images/'.$product['photo'] : 'images/noimage.jpg'; ?>" width="100%" class="zoom" data-magnify-src="images/large-<?php echo $product['photo']; ?>">
-		            		<br><br>
-		            		<form class="form-inline" id="productForm">
-		            			<div class="form-group">
-			            			<div class="input-group col-sm-5">
-			            				
-			            				<span class="input-group-btn">
-			            					<button type="button" id="minus" class="btn btn-default btn-flat btn-lg"><i class="fa fa-minus"></i></button>
-			            				</span>
-							          	<input type="text" name="quantity" id="quantity" class="form-control input-lg" value="1">
-							            <span class="input-group-btn">
-							                <button type="button" id="add" class="btn btn-default btn-flat btn-lg"><i class="fa fa-plus"></i>
-							                </button>
-							            </span>
-							            <input type="hidden" value="<?php echo $product['prodid']; ?>" name="id">
-							        </div>
-			            			<button type="submit" class="btn btn-primary btn-lg btn-flat"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
-			            		</div>
-		            		</form>
-		            	</div>
-		            	<div class="col-sm-6">
-		            		<h1 class="page-header"><?php echo $product['prodname']; ?></h1>
-		            		<h3><b>&#36; <?php echo number_format($product['price'], 2); ?></b></h3>
-		            		<p><b>Category:</b> <a href="category.php?category=<?php echo $product['cat_slug']; ?>"><?php echo $product['catname']; ?></a></p>
-		            		<p><b>Description:</b></p>
-		            		<p><?php echo $product['description']; ?></p>
-		            	</div>
-		            </div>
-		            <br>
-				    <div class="fb-comments" data-href="http://localhost/ecommerce/product.php?product=<?php echo $slug; ?>" data-numposts="10" width="100%"></div> 
-	        	</div>
-	        	<div class="col-sm-3">
-	        		<?php include 'includes/sidebar.php'; ?>
-	        	</div>
-	        </div>
-	      </section>
-	     
-	    </div>
-	  </div>
-  	<?php $pdo->close(); ?>
-  	<?php include 'includes/footer.php'; ?>
-</div>
 
-<?php include 'includes/scripts.php'; ?>
-<script>
-$(function(){
-	$('#add').click(function(e){
-		e.preventDefault();
-		var quantity = $('#quantity').val();
-		quantity++;
-		$('#quantity').val(quantity);
-	});
-	$('#minus').click(function(e){
-		e.preventDefault();
-		var quantity = $('#quantity').val();
-		if(quantity > 1){
-			quantity--;
+		<div class="container">
+
+			<!-- Main content -->
+			<section class="product-details">
+				<div class="product-details-wrapper">
+					<div class="product-images">
+						<div class="product-images__secondary-images">
+							<?php foreach ($productImages as $productImg) { ?>
+								<div class="product-images__secondary-img-wrapper">
+									<img class="product-images__secondary-img" src="uploads/<?php echo $productImg['file_name'] ?>" alt="">
+								</div>
+							<?php } ?>
+						</div>
+						<div class="product-images__primary-img-container">
+							<div class="product-images__primary-img-wrapper">
+								<img id="productPrimaryImg" class="product-images__primary-img" src="uploads/<?php echo $product['primary_image']  ?>" alt="">
+							</div>
+							<button class="product-card__btn btn-100" onclick="addToCart(<?php echo $product['product_id'] ?>)">Add to Cart</button>
+						</div>
+
+					</div>
+					<div class="product-details_info">
+						<h1 class="products-details__product-name"><?php echo $product['product_name'] ?></h1>
+						<h3 class="products-details__product-price">MWK <?php echo $product['product_price'] ?></h3>
+						<p class="products-details__product_category">Category: <a href="category.php?category=<?php echo $product['category_name'] ?>"><?php echo $product['category_name'] ?></a></p>
+						<p class="products-details__product-description"><?php echo $product['product_description'] ?></p>
+					</div>
+				</div>
+
+			</section>
+		</div>
+	</div>
+	<script src="js/main.js"></script>
+	<script>
+		const productImages = document.querySelectorAll('.product-images__secondary-img');
+		productImages.forEach((productImage, _) => {
+			productImage.addEventListener('click', function() {
+				document.querySelector('#productPrimaryImg').src = productImage.src;
+
+			})
+		})
+
+		function addToCart(productId) {
+
+			const formData = new FormData();
+			formData.append("productID", productId);
+			fetch("add_to_cart.php", {
+					method: "POST",
+					body: formData
+				}).then(response => response.text())
+				.then(data => {
+					if (data === "error") {
+						alert("Failed to add product to cart.");
+					} else {
+						document.querySelector("#cartCount").innerHTML = data; // update cart
+					}
+				})
 		}
-		$('#quantity').val(quantity);
-	});
-
-});
-</script>
+	</script>
 </body>
+
 </html>

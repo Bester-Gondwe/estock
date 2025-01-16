@@ -26,12 +26,12 @@ $customerOrders = $orders->getOrdersPaginated($_SESSION['user_id'], $calc_page, 
         <p><a href="./index.php?p=home">Home</a> > <a href="./index.php?p=orders">Orders List</a></p>
     </div>
 
-    <select name="orderStatusFilter" id="orderStatusFilter">
+    <!-- <select name="orderStatusFilter" id="orderStatusFilter">
         <option value selected>All</option>
         <option value="pending">Pending</option>
         <option value="cancled">Cancled</option>
         <option value="derivered">Derivered</option>
-    </select>
+    </select> -->
 
 </div>
 <section class="orders">
@@ -101,9 +101,9 @@ $customerOrders = $orders->getOrdersPaginated($_SESSION['user_id'], $calc_page, 
 
 </section>
 <script>
-    document.querySelector("#orderStatusFilter").addEventListener('change',function() {
-        console.log(this.value)
-    })
+    // document.querySelector("#orderStatusFilter").addEventListener('change',function() {
+    //     console.log(this.value)
+    // })
 
     const ordersRows = document.querySelectorAll(".order-table__row");
     ordersRows.forEach((order, _) => {

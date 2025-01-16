@@ -39,7 +39,7 @@ class User extends Database
             if (password_verify($passwd, $row['passwd'])) {
                 return $row; // Return user data if login is successful
             }
-            throw new Exception("Wrong email or password");
+            return false;
         }
     }
 
@@ -49,7 +49,7 @@ class User extends Database
     {
         $query = "SELECT COUNT(*) FROM $this->usersTable WHERE email = :email";
         $stmt = $this->executeQuery($query, ['email' => $email]);
-        return $stmt->fetchColumn() > 0;
+        return $stmt->fetchColumn() > 0 ? true : false;
     }
 
     public function updateUser($user_id, $first_name, $last_name, $email)

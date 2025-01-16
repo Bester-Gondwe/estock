@@ -12,24 +12,22 @@ if (isset($_SESSION['user_id'])) {
 }
 if (isset($_POST['submit'])) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-        $keepMeLoggedIn = isset($_POST['keepLoggedCheck']);
-        try {
-            $user = new User();
-            $loggedInUser = $user->login($email, $password);
-            // Store user information in the session
+        
+        $email = htmlspecialchars($_POST['email']);
+        $password = htmlentities($_POST['password']);
 
+        $keepMeLoggedIn = isset($_POST['keepLoggedCheck']);
+
+        $user = new User();
+
+        $loggedInUser = $user->login($email, $password);
+        if ($loggedInUser) {
+            // Store user information in the session
             $_SESSION['user_id'] = $loggedInUser['user_id'];
             $_SESSION['first_name'] = $loggedInUser['first_name'];
             $_SESSION['last_name'] = $loggedInUser['last_name'];
             $_SESSION['email'] = $loggedInUser['email'];
             $_SESSION['user_role'] = $user->getUserRoles($loggedInUser['user_id'])['role_name'];
-
-            if ($keepMeLoggedIn) {
-                setcookie("email", $email . time() + (30 * 24 * 60 * 60), "/");
-                setcookie("password", $password . time() + (30 * 24 * 60 * 60), "/");
-            }
 
             // Redirect to dashboard or another page
             if ($_SESSION['user_role'] == "Merchant") {
@@ -38,9 +36,6 @@ if (isset($_POST['submit'])) {
                 header("Location: ./");
             }
             exit;
-        } catch (Exception $e) {
-            // Handle login error
-            $error = $e->getMessage();
         }
     }
 }

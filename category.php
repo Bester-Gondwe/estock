@@ -7,7 +7,7 @@ if (!isset($_SESSION['cart'])) {
 
 require_once 'models/Product.php';
 
-$categorySlug = $_GET['category'] ?? 'Phones';
+$categorySlug = $_GET['category'];
 $product = new Product();
 
 $filteredProducts = $product->getProductsByCategory($categorySlug);
@@ -37,7 +37,7 @@ $filteredProducts = $product->getProductsByCategory($categorySlug);
 							<div class="product-card">
 								<img class="product-card__img" src="uploads/<?php echo $filteredProduct['primary_image'] ?> " alt="<?php echo $filteredProduct['product_name'] ?>">
 								<div class="product-info">
-									<h2 class="product-card__product-name"><?php echo $filteredProduct['product_name'] ?></h2>
+									<a class="product-card__product-name" href="product.php?id=<?php echo $filteredProduct['product_id'] ?>"><?php echo $filteredProduct['product_name'] ?></a>
 									<span class="product-card__product-price">K<?php echo $filteredProduct['product_price'] ?></span>
 									<button class="product-card__btn" onclick="addToCart(<?php echo $filteredProduct['product_id'] ?>)">Add to Cart</button>
 								</div>

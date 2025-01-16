@@ -14,7 +14,7 @@ $tableRow = '';
             <div class="container cart-container">
                 <div class="table__wrapper">
                     <h4 class="table-title">Your Cart</h4>
-                    <table>
+                    <table class="cart-table">
                         <thead>
                             <th></th>
                             <th>Name</th>
@@ -22,14 +22,14 @@ $tableRow = '';
                             <th width="10%">Quantity</th>
                             <th>Subtotal</th>
                         </thead>
-                        <tbody id="tbody">
+                        <tbody class="cart-table__body" id="tbody">
                         </tbody>
                     </table>
                 </div>
                 <div class="cart-footer">
                     <?php
                     if (isset($_SESSION['user_id'])) {
-                        echo "<button class='btn' id='paypal-button' onclick='proceedOrder()'>Proceed</button>";
+                        echo "<button class='btn btn-dark' id='paypal-button' onclick='proceedOrder()'>Proceed</button>";
                     } else {
                         echo "<h4>You need to <a href='login.php'>Login</a> to checkout.</h4>";
                     }

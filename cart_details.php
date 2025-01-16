@@ -23,9 +23,10 @@ if (isset($_SESSION['cart']) && count($_SESSION['cart']) != 0) {
     </tr>";
     }
 
-    $output .= "<tr><td colspan='5' align='right'><b>Total</b></td><td><b>&#36; " . number_format($total, 2) . "</b></td><tr>";
+    $output .= "<tfoot><td>helo</td></tfoot>";
+    // $output .= "<tr><td colspan='5' align='right'><b>Total</b></td><td><b>&#36; " . number_format($total, 2) . "</b></td><tr>";
 } else {
-    $output .= "<tr><td colspan='6' align='center'>Shopping cart empty</td><tr>";
+    $output .= "<tr><td colspan='5' align='center'>Shopping cart empty</td><tr>";
 }
 
 echo  $output;
