@@ -21,10 +21,16 @@ class Order extends Database
     }
 
     // Add products to an order
-    public function addProductToOrder($order_id, $product_id,$quantity)
+    public function addProductToOrder($order_id, $product_id, $quantity)
     {
         $query = "INSERT INTO $this->orderItemsTable (order_id,product_id,quantity) VALUES (:order_id,:product_id,:quantity)";
-        $this->executeQuery($query, ['order_id' => $order_id, 'product_id' => $product_id,'quantity' => $quantity]);
+        $this->executeQuery($query, ['order_id' => $order_id, 'product_id' => $product_id, 'quantity' => $quantity]);
+    }
+
+    public function updateOrderAmount($order_id, $amount)
+    {
+        $query = "UPDATE orders SET amount=:amount WHERE order_id=:order_id";
+        $this->executeQuery($query, ['order_id' => $order_id, 'amount' => $amount]);
     }
 
     // Fetch orders by customer
@@ -63,6 +69,7 @@ class Order extends Database
         $query = "UPDATE $this->ordersTable SET order_status =:order_status WHERE order_id =:order_id";
         return  $this->executeQuery($query, ['order_id' => $order_id, 'order_status' => $order_status]);
     }
+
 
     // get paginated orders
     public function getOrdersPaginated($userId, $offset, $limit)

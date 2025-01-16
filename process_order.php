@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
                 $_SESSION['cart'] = [];
+                $order->updateOrderAmount($order_id, $total);
                 echo "Order placed";
             } else {
                 echo "error occured";

@@ -21,10 +21,10 @@ $tableRow = '';
                             <th></th>
                             <th>Name</th>
                             <th>Price</th>
-                            <th width="10%">Quantity</th>
+                            <th>Quantity</th>
                             <th>Subtotal</th>
                         </thead>
-                        <tbody class="cart-table__body" id="tbody">                        </tbody>
+                        <tbody class="cart-table__body" id="tbody"> </tbody>
 
                     </table>
                 </div>
@@ -42,16 +42,15 @@ $tableRow = '';
     </div>
     <script src="js/main.js"></script>
     <script>
+        getDetails();
+
         function proceedOrder() {
             fetch("process_order.php", {
                     method: "POST",
                 }).then(response => response.text())
                 .then(data => {
-                    if (data === "error") {
-                        alert("Failed to delete product from cart.");
-                    } else {
-                        alert(data)
-                    }
+                    alert(data)
+                    location.reload();
                 })
         }
 
@@ -62,7 +61,7 @@ $tableRow = '';
                     document.querySelector("#tbody").innerHTML = data;
                 })
         }
-        getDetails();
+
 
         function deleteFromCart(productId) {
             const formData = new FormData();
@@ -94,7 +93,7 @@ $tableRow = '';
                         method: "POST",
                         body: updateFormData
                     }).then(response => response.text()).then(data => {
-                       
+
                     })
                     getDetails();
                 }
