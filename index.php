@@ -14,7 +14,10 @@ $category = new Category();
     <div class="container1">
         <h1>Welcome to Our Store</h1>
         <p>Discover amazing products and services designed for you.</p>
-        <a href="#" class="cta-button">Shop Now</a>
+        <div class="cta-button">
+          <a href="#" class="cta-button">Shop Now</a>
+        </div>
+        
     </div>
 
    
