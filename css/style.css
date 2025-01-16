@@ -322,7 +322,7 @@
 
 
 .table__wrapper {
-    min-height: 424px;
+    /* min-height: 424px; */
     border-radius: 16px;
     padding: 16px 24px;
     background-color: white;
@@ -340,8 +340,10 @@ table {
 
 .cart-table {
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
+    /* display: flex; */
+    /* flex-direction: column; */
+    margin-bottom: 8px;
+    width: 500px;
 }
 
 .cart-table__body {
