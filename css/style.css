@@ -335,7 +335,7 @@ table {
     border-spacing: 0 10px;
     margin-left: 20px;
     border-collapse: collapse;
-    width: 100%;
+    /* width: 100%; */
 }
 
 .cart-table {
@@ -362,7 +362,7 @@ table {
 }
 
 .cart-container {
-    width: 80%;
+    width: 70%;
 }
 
 .cart-footer {

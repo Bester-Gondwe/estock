@@ -283,6 +283,8 @@ function editProduct(productId) {
                     productFormFileInput.disabled = true
                 }
                 renderPreviews();
+
+                console.log(data);
             }
         });
 }
