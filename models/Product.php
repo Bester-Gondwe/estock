@@ -48,6 +48,7 @@ class Product extends Database
         products.product_name, 
         products.product_price, 
         products.product_description,
+        products.quantity,
         categories.category_name,
         product_images.file_name AS primary_image 
         FROM products JOIN categories ON $this->products_table.category_id=categories.category_id
