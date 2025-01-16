@@ -11,15 +11,13 @@ session_start();
 
 <body>
   <?php include "navbar.php" ?>
-  <div class="wrapper login-container">
-    <div class="success-content">
+  <div class="landing-page-container">
+    <div class="landing-page">
       <h1>Welcome to Our Store</h1>
       <p>Discover amazing products and services designed for you.</p>
-      <div class="cta-button">
-        <a href="#" class="cta-button">Shop Now</a>
-      </div>
+      <a href="#" class="cta-button">Shop Now</a>
     </div>
-  </div>
+
   </div>
   <script src="js/main.js"></script>
 </body>
