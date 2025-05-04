@@ -2,251 +2,128 @@ const productForm = document.querySelector("#product-form");
 const productFormFileInput = document.querySelector("#productFormFileInput");
 const fileInput = document.querySelector("#imageInput");
 const previewList = document.querySelector("#preview-list");
-const modal = document.getElementById('productModal');
+const modal = document.getElementById("productModal");
 const primaryImageView = document.querySelector("#primaryImg");
 
-
 let existingImages = [];
-let newImages = []; // Array to keep track of selected files
-let removedImageIDs = [];
+let newImages = [];
+let deletedExistingImages = [];
 let productImagesCount = 0;
 let primaryImage = null;
-let deletedExistingImages = [];
 
-function loadProducts() {
-    fetch(`category_handler.php`)
-        .then(response => response.json())
-        .then(data => {
-            if (data) {
-                document.querySelector("#categoryName").innerHTML = "<option value selected>- select -</option>" + data.map((category) => `<option value='${category.category_name}'>${category.category_name}</option>`).join("");
-            }
-        });
-
-    fetch(`product_handler.php`)
-        .then(response => response.json())
-        .then(data => {
-            if (data) {
-                document.querySelector("#product-cards").innerHTML = data.map(renderProductCard).join("");
-            }
-        });
-
-
-
-
-}
-
+// Load all data on startup
 loadProducts();
 
-document.querySelector('.close').addEventListener('click', closeModal);
+function loadProducts() {
+    fetch("category_handler.php")
+        .then(res => res.json())
+        .then(data => {
+            const options = data?.map(c => `<option value="${c.category_name}">${c.category_name}</option>`) || [];
+            document.querySelector("#categoryName").innerHTML = `<option value selected>- select -</option>${options.join("")}`;
+        });
 
-// Close modal when clicking outside the modal content
-window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        closeModal();
-    }
-});
+    fetch("product_handler.php")
+        .then(res => res.json())
+        .then(data => {
+            document.querySelector("#product-cards").innerHTML = data.map(renderProductCard).join("");
+        });
+}
 
 function closeModal() {
-    modal.classList.remove('open');
-
-    //reset
-    newImages = [];
-    removedImageIDs = [];
-    productImagesCount = 0;
-    previewList.innerHTML = "";
-
-    clearProductForm();
-
+    modal.classList.remove("open");
+    resetForm();
     loadProducts();
 }
 
+// Close modal on click outside or close button
+window.addEventListener("click", e => e.target === modal && closeModal());
+document.querySelector(".close").addEventListener("click", closeModal);
 
-productForm.addEventListener('submit', (e) => {
+// Trigger file dialog
+productFormFileInput.addEventListener("click", e => {
     e.preventDefault();
+    fileInput.click();
 });
 
+// Handle image selection
+fileInput.addEventListener("change", e => {
+    e.preventDefault();
 
-function deleteProduct(productId) {
+    const files = Array.from(e.target.files);
+    const allowed = 4 - productImagesCount;
 
-    if (confirm("Are you sure deleting this product ?")) {
-        fetch(`product_handler.php?productId=${productId}`, {
-            method: "DELETE"
-        })
-            .then(response => response.text())
-            .then(data => {
-                console.log(data);
-            })
-            .catch(error => {
-                console.log("error");
-            });
-        loadProducts();
-    }
-}
+    files.slice(0, allowed).forEach(file => {
+        newImages.push(file);
+        productImagesCount++;
+    });
 
-
-document.querySelector("#addProductBtn").addEventListener('click', function () {
-    modal.classList.add("open");
-})
+    renderPreviews();
+    fileInput.value = "";
+});
 
 // Handle form submission
-document.querySelector("#updateBtn").addEventListener('click', function (e) {
+document.querySelector("#updateBtn").addEventListener("click", e => {
     e.preventDefault();
     const formData = new FormData();
+
     formData.append("productId", productForm.productId.value);
     formData.append("productName", productForm.productName.value);
     formData.append("productDescription", productForm.productDescription.value);
     formData.append("productPrice", productForm.productPrice.value);
     formData.append("stockQuantity", productForm.stockQuantity.value);
     formData.append("categoryName", productForm.categoryName.value);
+    formData.append("primaryImg", primaryImage);
 
-    // Append selected files
     newImages.forEach((file, index) => {
         formData.append(`productImages[${index}]`, file);
     });
 
-    formData.append("primaryImg", primaryImage);
-
-
-    let removedImageIDs = [];
-    existingImages.filter((image, index) => deletedExistingImages.includes(image.image_id)).forEach((img) => removedImageIDs.push(img.image_id));
+    const removedImageIDs = existingImages
+        .filter(img => deletedExistingImages.includes(img.image_id))
+        .map(img => img.image_id);
 
     if (productForm.productId.value) {
         formData.append("action", "update");
-        if (removedImageIDs.length > 0)
+        if (removedImageIDs.length) {
             formData.append("removedImgs", JSON.stringify(removedImageIDs));
+        }
     }
 
     fetch("product_handler.php", {
         method: "POST",
         body: formData,
     })
-        .then(response => response.text())
-        .then(data => {
-            alert(data)
-        })
-        .catch(error => {
-            alert(error)
-        });
+        .then(res => res.text())
+        .then(alert)
+        .catch(error => alert(error));
 
-    existingImages = [];
-    newImages = []; // Array to keep track of selected files
-    removedImageIDs = [];
-    productImagesCount = 0;
-    primaryImage = null;
-    deletedExistingImages = [];
+    resetForm();
 });
 
-//Trigger the file input when the button is clicked
-productFormFileInput.addEventListener("click", (e) => {
-    e.preventDefault();
-    fileInput.click();
+// Add Product button
+document.querySelector("#addProductBtn").addEventListener("click", () => {
+    modal.classList.add("open");
 });
 
-// Handle new file selection
-fileInput.addEventListener("change", function (e) {
-    e.preventDefault(); // Prevent accidental form submission
+// Delete product
+function deleteProduct(productId) {
+    if (!confirm("Are you sure deleting this product?")) return;
 
-    const files = Array.from(e.target.files);
-    const remainingImages = 4 - productImagesCount;
-    let i = 0;
-    for (; i < remainingImages; i++) {
-        newImages.push(files[i]);
-        productImagesCount++;
-    }
-    renderPreviews();
-    // if (remainingImages > 0) {
-    //     for (let i = 0; i < remainingImages; i++) {
-    //         
-    //         productImagesCount++;
-    //     }
-    //  
-    //     if (productImagesCount == 4)
-    //         productFormFileInput.disabled = true;
-    //     
-    // }
-
-    // reset file input
-    fileInput.value = "";
-});
-
-
-function createPreviewItem(src, isExistingImg, index) {
-
-    const previewItem = document.createElement("li");
-    previewItem.classList.add("preview-item")
-
-    const previewItemImg = document.createElement("img");
-
-    previewItemImg.classList.add("preview-item__img");
-    previewItemImg.src = src;
-    previewItemImg.alt = "Preview";
-
-    const previewItemImgWrapper = document.createElement("div");
-
-    previewItemImgWrapper.classList.add("preview-item__img-wrapper");
-
-    const previewItemDeleteBtn = document.createElement("img");
-    previewItemDeleteBtn.src = "../images/close-svgrepo-com.svg";
-
-    previewItem.addEventListener('mouseover', () => {
-        previewItemDeleteBtn.classList.add('active');
-    });
-
-    previewItem.addEventListener('mouseout', () => {
-        previewItemDeleteBtn.classList.remove('active');
-    });
-
-
-    previewItemDeleteBtn.classList.add("preview-item__delete-btn");
-
-    // Add event listener to remove the image
-    previewItemDeleteBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-
-        if (isExistingImg) {
-            deletedExistingImages.push(index);
-        } else {
-            newImages.splice(index, 1);
-        }
-
-        if (primaryImage == index || primaryImage == `new-${index}`) {
-            primaryImageView.src = "../images/landscape-placeholder-svgrepo-com.svg";
-            primaryImage = null;
-        }
-
-        renderPreviews();
-        previewItem.remove(); // Remove the preview
-        productImagesCount--;
-        productFormFileInput.disabled = false;
-    });
-
-
-
-    previewItem.addEventListener('click', function (e) {
-        if (e.target == previewItemImg) {
-            primaryImageView.src = src;
-
-            if (!isExistingImg)
-                primaryImage = `new-${index}`;
-            else
-                primaryImage = index
-        }
-    })
-
-    // previewItem.appendChild(previewItemImg);
-    previewItem.appendChild(previewItemImgWrapper);
-    previewItemImgWrapper.appendChild(previewItemImg);
-    previewItemImgWrapper.appendChild(previewItemDeleteBtn);
-    previewList.appendChild(previewItem);
+    fetch(`product_handler.php?productId=${productId}`, { method: "DELETE" })
+        .then(res => res.text())
+        .then(console.log)
+        .catch(console.error)
+        .finally(loadProducts);
 }
 
-
+// Render product card
 function renderProductCard(product) {
+    const image = product.primary_image ? `../uploads/${product.primary_image}` : "../images/landscape-placeholder-svgrepo-com.svg";
     return `
-             <div class="product-card">
-                <div class="product-card__container">
+        <div class="product-card">
+            <div class="product-card__container">
                 <div class="product-image">
-                    <img src="${product.primary_image === null ? '../images/landscape-placeholder-svgrepo-com.svg' : '../uploads/' + product.primary_image}" alt="Product Image">
+                    <img src="${image}" alt="Product Image">
                 </div>
                 <div class="product-info">
                     <p class="product-name">${product.category_name}</p>
@@ -256,78 +133,114 @@ function renderProductCard(product) {
             </div>
             <p>${product.product_description}</p>
             <div class="product-actions">
-                <button id="btn-edit" class="btn edit-btn" onclick="editProduct(${product.product_id})" >Edit</button>
-                <button class="btn delete-btn"  onclick="deleteProduct(${product.product_id})">Delete</button>
+                <button class="btn edit-btn" onclick="editProduct(${product.product_id})">Edit</button>
+                <button class="btn delete-btn" onclick="deleteProduct(${product.product_id})">Delete</button>
             </div>
         </div>`;
 }
 
-
-
+// Edit product
 function editProduct(productId) {
-    // open modal
-    modal.classList.add('open');
+    modal.classList.add("open");
     fetch(`product_handler.php?id=${productId}`)
-        .then(response => response.json())
+        .then(res => res.json())
         .then(data => {
-            if (data) {
-                document.querySelector("#productId").value = data.product_id;
-                document.querySelector("#productName").value = data.product_name;
-                document.querySelector("#productDescription").value = data.product_description;
-                document.querySelector("#productPrice").value = data.product_price;
-                document.querySelector("#stockQuantity").value = data.quantity;
-                document.querySelector("#categoryName").value = data.category_name;
-                existingImages = data.images;
-                productImagesCount = existingImages.length
-                if (productImagesCount == 4) {
-                    productFormFileInput.disabled = true
-                }
-                renderPreviews();
+            productForm.productId.value = data.product_id;
+            productForm.productName.value = data.product_name;
+            productForm.productDescription.value = data.product_description;
+            productForm.productPrice.value = data.product_price;
+            productForm.stockQuantity.value = data.quantity;
+            productForm.categoryName.value = data.category_name;
 
-                console.log(data);
-            }
+            existingImages = data.images || [];
+            productImagesCount = existingImages.length;
+
+            productFormFileInput.disabled = productImagesCount >= 4;
+            renderPreviews();
         });
 }
 
-
+// Preview rendering
 function renderPreviews() {
-    const container = document.getElementById('preview-list');
-    container.innerHTML = ''; // Clear existing previews
+    previewList.innerHTML = "";
 
-    // Render existing images
-    existingImages.forEach((image, index) => {
-
-        if (image.is_primary == 1 && !deletedExistingImages.includes(image.image_id)) {
-            primaryImageView.src = image.file_name;
-            primaryImage = image.image_id;
+    existingImages.forEach(img => {
+        if (!deletedExistingImages.includes(img.image_id)) {
+            if (img.is_primary === 1) {
+                primaryImageView.src = img.file_name;
+                primaryImage = img.image_id;
+            }
+            createPreviewItem(img.file_name, true, img.image_id);
         }
-
-        if (!deletedExistingImages.includes(image.image_id))
-            createPreviewItem(image.file_name, true, image.image_id);
     });
 
-    // Render new images
     newImages.forEach((file, index) => {
         const reader = new FileReader();
-        reader.onload = () => {
-            createPreviewItem(reader.result, false, index);
-        };
-        console.log(file);
+        reader.onload = () => createPreviewItem(reader.result, false, index);
         reader.readAsDataURL(file);
     });
 }
 
-function clearProductForm() {
-    document.querySelector("#productId").value = null;
-    document.querySelector("#productName").value = null;
-    document.querySelector("#productDescription").value = null;
-    document.querySelector("#productPrice").value = null;
-    document.querySelector("#stockQuantity").value = null;
-    document.querySelector("#categoryName").value = null;
+// Create preview item
+function createPreviewItem(src, isExisting, index) {
+    const item = document.createElement("li");
+    item.classList.add("preview-item");
 
-    primaryImageView.src = "../images/landscape-placeholder-svgrepo-com.svg";
-    previewList.innerHTML = "";
+    const imgWrapper = document.createElement("div");
+    imgWrapper.classList.add("preview-item__img-wrapper");
 
-    existingImages = [];
+    const img = document.createElement("img");
+    img.classList.add("preview-item__img");
+    img.src = src;
+    img.alt = "Preview";
+
+    const deleteBtn = document.createElement("img");
+    deleteBtn.src = "../images/close-svgrepo-com.svg";
+    deleteBtn.classList.add("preview-item__delete-btn");
+
+    item.addEventListener("mouseover", () => deleteBtn.classList.add("active"));
+    item.addEventListener("mouseout", () => deleteBtn.classList.remove("active"));
+
+    deleteBtn.addEventListener("click", e => {
+        e.preventDefault();
+
+        if (isExisting) {
+            deletedExistingImages.push(index);
+        } else {
+            newImages.splice(index, 1);
+        }
+
+        if (primaryImage === index || primaryImage === `new-${index}`) {
+            primaryImage = null;
+            primaryImageView.src = "../images/landscape-placeholder-svgrepo-com.svg";
+        }
+
+        productImagesCount--;
+        productFormFileInput.disabled = false;
+        renderPreviews();
+    });
+
+    item.addEventListener("click", e => {
+        if (e.target === img) {
+            primaryImageView.src = src;
+            primaryImage = isExisting ? index : `new-${index}`;
+        }
+    });
+
+    imgWrapper.append(img, deleteBtn);
+    item.appendChild(imgWrapper);
+    previewList.appendChild(item);
 }
 
+// Reset everything
+function resetForm() {
+    productForm.reset();
+    previewList.innerHTML = "";
+    primaryImageView.src = "../images/landscape-placeholder-svgrepo-com.svg";
+
+    existingImages = [];
+    newImages = [];
+    deletedExistingImages = [];
+    productImagesCount = 0;
+    primaryImage = null;
+}

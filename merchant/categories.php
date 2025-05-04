@@ -6,7 +6,7 @@ require_once "../models/Category.php";
 $category = new Category();
 
 // Get the total number of records from our table "orders" for a specific Merchant.
-$total_pages = $category->countCotegories();
+$total_pages = $category->countCategories();
 
 // Check if the page number is specified and check if it's a number, if not return the default page number which is 1.
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;

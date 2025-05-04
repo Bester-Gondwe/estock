@@ -1,55 +1,72 @@
 <?php
 session_start();
 
-if (isset($_SESSION['user_id'])) {
-    require_once "../models/Category.php";
+header("Content-Type: application/json");
 
-    $category = new Category();
-
-    $method = $_SERVER['REQUEST_METHOD'];
-
-    if ($method === 'GET') {
-
-        // Fetch all or a single product
-        if (isset($_GET['id'])) {
-            $id = $_GET['id'];
-
-            // echo json_encode();
-            echo "getting category by id";
-        } else {
-            echo json_encode($category->countMerchantCategories($_SESSION['user_id']));
-        }
-    } elseif ($method === 'POST') {
-        $action = $_POST['action'] ?? null;
-        $categoryName = $_POST['categoryName'];
-        $categoryId = $_POST['categoryId'];
-
-        if ($action == null) {
-            if ($category->addCategory($categoryName)) {
-                echo "Category created successfully";
-            } else {
-                echo "Category creation failed.";
-            }
-        } else {
-            if ($categoryId != null && $categoryName != null) {
-                if ($category->updateCategory($categoryId, $categoryName)) {
-                    echo "Category updated successfully";
-                } else {
-                    echo "Category update failed.";
-                }
-            } else {
-                echo "No Category Id was provided for update";
-            }
-        }
-    } elseif ($method === 'DELETE') {
-        $categoryID = $_GET['categoryID'];
-        if ($category->deleteCategory($categoryID)) {
-            echo "Category deleted successfully.";
-        } else {
-            echo "Category deletion failed.";
-        }
-    }
-} else {
-    header("Location: ../login.php");
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(["error" => "Unauthorized"]);
     exit;
+}
+
+require_once "../models/Category.php";
+$category = new Category();
+$userId = $_SESSION['user_id'];
+$method = $_SERVER['REQUEST_METHOD'];
+
+switch ($method) {
+    case 'GET':
+        if (isset($_GET['id'])) {
+            $id = intval($_GET['id']);
+            $categoryData = $category->getCategoryById($id);
+            echo json_encode($categoryData);
+        } else {
+            // Return all categories for logged-in merchant
+            $categories = $category->countMerchantCategories($userId);
+            echo json_encode($categories);
+        }
+        break;
+
+    case 'POST':
+        $categoryName = $_POST['categoryName'] ?? null;
+        $categoryId = $_POST['categoryId'] ?? null;
+
+        if (!$categoryName) {
+            echo json_encode(["error" => "Category name is required"]);
+            exit;
+        }
+
+        if ($categoryId) {
+            // Update category if categoryId exists
+            if ($category->updateCategory($categoryId, $categoryName)) {
+                echo json_encode(["message" => "Category updated successfully"]);
+            } else {
+                echo json_encode(["error" => "Category update failed"]);
+            }
+        } else {
+            // Create new category if no categoryId exists
+            if ($category->addCategory($categoryName)) {
+                echo json_encode(["message" => "Category created successfully"]);
+            } else {
+                echo json_encode(["error" => "Category creation failed"]);
+            }
+        }
+        break;
+
+    case 'DELETE':
+        // Parse raw URL data manually
+        parse_str(file_get_contents("php://input"), $deleteData);
+        $categoryID = $deleteData['categoryID'] ?? $_GET['categoryID'] ?? null;
+
+        if ($categoryID && $category->deleteCategory($categoryID)) {
+            echo json_encode(["message" => "Category deleted successfully"]);
+        } else {
+            echo json_encode(["error" => "Category deletion failed"]);
+        }
+        break;
+
+    default:
+        http_response_code(405);
+        echo json_encode(["error" => "Method not allowed"]);
+        break;
 }

@@ -1,5 +1,5 @@
 <?php 
-session_start();
+
 
 if (!isset($_SESSION['cart'])) {
 	$_SESSION['cart'] = [];
@@ -25,6 +25,7 @@ if (isset($_GET['category'])) {
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Category</title>
 	<?php include 'header.php' ?>
+	<script src='https://cdn.tailwindcss.com'></script>
 	<style>
 		.toast {
 			animation: slideIn 0.5s ease, fadeOut 0.5s ease 2.5s forwards;

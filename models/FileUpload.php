@@ -9,40 +9,39 @@ class FileUpload
     {
         $productImage = new ProductImage();
         $responses = [];
+        $primaryImageId = null;
 
-        $primaryImage = $primaryImg;
+        if (!isset($uploadedFiles['name']) || !is_array($uploadedFiles['name'])) {
+            return [];
+        }
 
         foreach ($uploadedFiles['name'] as $index => $fileName) {
-            // Get file details
-            $fileTmpPath = $uploadedFiles['tmp_name'][$index];
+            $tmpPath = $uploadedFiles['tmp_name'][$index];
             $fileError = $uploadedFiles['error'][$index];
 
-            // Check for errors
             if ($fileError !== UPLOAD_ERR_OK) {
-                echo "Error uploading file: $fileName\n";
+                $responses[] = "Error uploading: $fileName";
                 continue;
             }
 
-            // Generate a unique name to avoid overwriting files
             $uniqueFileName = uniqid() . '-' . basename($fileName);
+            $destination = self::$uploadDir . $uniqueFileName;
 
-            if (move_uploaded_file($fileTmpPath, self::$uploadDir . $uniqueFileName)) {
+            if (move_uploaded_file($tmpPath, $destination)) {
                 $newImageId = $productImage->addProductImage($productId, $uniqueFileName, 0);
-                if ($newImageId) {
-                    // Update primary image if needed
-                    if ($primaryImg === "new-$index") {
-                        $primaryImage = $newImageId;
-                    }
+
+                if ($primaryImg === "new-$index") {
+                    $primaryImageId = $newImageId;
                 }
 
-                $response[] = "Uploaded: $fileName";
+                $responses[] = "Uploaded: $fileName";
             } else {
-                $response[] = "Failed to upload: $fileName";
+                $responses[] = "Failed to upload: $fileName";
             }
         }
 
-        if ($primaryImage) {
-            $productImage->changePrimaryImg($productId, $primaryImage);
+        if ($primaryImageId) {
+            $productImage->changePrimaryImg($productId, $primaryImageId);
         }
 
         return $responses;

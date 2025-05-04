@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 require_once "models/Product.php";
 ?>
 <!DOCTYPE html>
@@ -8,6 +8,7 @@ require_once "models/Product.php";
 
 <body class="bg-gray-100 text-gray-800">
     <?php include 'navbar.php' ?>
+    <script src='https://cdn.tailwindcss.com'></script>
 
     <div class="max-w-6xl mx-auto p-6 mt-8">
         <h2 class="text-2xl font-semibold mb-4">🛒 Your Shopping Cart</h2>

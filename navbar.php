@@ -8,19 +8,19 @@ $isLoggedIn = isset($_SESSION['user_id']);
 $userName = $isLoggedIn ? $_SESSION['first_name'] . ' ' . $_SESSION['last_name'] : '';
 ?>
 
-<header class="bg-white shadow-sm">
+<header class="bg-blue shadow-sm">
     <div class="container mx-auto px-4 py-4 flex justify-between items-center">
         <a href="./" class="text-xl font-bold text-blue-600">eStore</a>
 
         <nav class="flex space-x-6 items-center">
             <a href="./" class="text-gray-700 hover:text-blue-600">Home</a>
 
-            <!-- Category Dropdown -->
-            <div class="relative group">
-                <button class="text-gray-700 hover:text-blue-600 focus:outline-none">
+            <!-- Category Dropdown (Click-based) -->
+            <div class="relative">
+                <button id="categoryToggle" class="text-gray-700 hover:text-blue-600 focus:outline-none">
                     Category
                 </button>
-                <div class="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded hidden group-hover:block z-10">
+                <div id="categoryDropdown" class="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded hidden z-10">
                     <ul class="py-2">
                         <?php foreach ($categories as $catg) : ?>
                             <li>
@@ -80,3 +80,22 @@ $userName = $isLoggedIn ? $_SESSION['first_name'] . ' ' . $_SESSION['last_name']
         </div>
     </div>
 </header>
+
+<!-- Category Toggle Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggleBtn = document.getElementById('categoryToggle');
+        const dropdown = document.getElementById('categoryDropdown');
+
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target) && !toggleBtn.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    });
+</script>
