@@ -4,8 +4,8 @@ session_start();
 $title = "Register";
 if (isset($_POST['submit'])) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $firstname =  htmlentities($_POST['firstname']);
-        $lastname =  htmlentities($_POST['lastname']);
+        $firstname = htmlentities($_POST['firstname']);
+        $lastname = htmlentities($_POST['lastname']);
         $email = htmlentities($_POST['email']);
         $password = htmlentities($_POST['password']);
         $accountType = htmlspecialchars($_POST['account_type']);
@@ -30,61 +30,71 @@ if (isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign up</title>
     <link rel="stylesheet" href="css/style.css">
+    <!-- Include Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-    <div class="wrapper login-container">
-        <div class="form-wrapper">
-            <form action="" method="post">
-                <h1 class="form-header">Sign up</h1>
-                <div class="fullname-field">
-                    <div class="input-box">
-                        <input class="input-box__field" placeholder="First Name" type="text" name="firstname"
-                            id="firstname" required>
+<body class="bg-gray-100">
+
+    <div class="flex justify-center items-center min-h-screen bg-gray-100">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
+            <h1 class="text-2xl font-bold text-center text-gray-700 mb-6">Sign up</h1>
+
+            <form action="" method="post" class="space-y-6">
+                <!-- Full Name Fields -->
+                <div class="flex space-x-4">
+                    <div class="w-1/2">
+                        <label for="firstname" class="block text-sm font-medium text-gray-700">First Name</label>
+                        <input type="text" name="firstname" id="firstname" placeholder="First Name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                     </div>
-                    <div class="input-box">
-                        <input class="input-box__field" placeholder="Last Name" type="text" name="lastname"
-                            id="lastname" required>
+                    <div class="w-1/2">
+                        <label for="lastname" class="block text-sm font-medium text-gray-700">Last Name</label>
+                        <input type="text" name="lastname" id="lastname" placeholder="Last Name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                     </div>
                 </div>
-                <div class="account-type-field input-box">
-                    <p class="account-type-field-label">Account Type</p>
-                    <div class="account-types">
-                        <div class="account-type-wrapper">
-                            <input type="radio" name="account_type" id="customer-type" value="Customer" required>
-                            <label for="customer-type">Customer</label>
+
+                <!-- Account Type Fields -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Account Type</label>
+                    <div class="flex items-center space-x-6">
+                        <div class="flex items-center space-x-2">
+                            <input type="radio" name="account_type" id="customer-type" value="Customer" required class="h-4 w-4 text-blue-500 border-gray-300 rounded">
+                            <label for="customer-type" class="text-sm text-gray-600">Customer</label>
                         </div>
-                        <div class="account-type-wrapper">
-                            <input type="radio" name="account_type" id="merchant-type" value="Merchant">
-                            <label for="merchant-type">Merchant</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="radio" name="account_type" id="merchant-type" value="Merchant" class="h-4 w-4 text-blue-500 border-gray-300 rounded">
+                            <label for="merchant-type" class="text-sm text-gray-600">Merchant</label>
                         </div>
                     </div>
-
-                </div>
-                <div class="input-box">
-                    <input class="input-box__field" placeholder="Email" type="email" name="email" id="email" required>
-                    <p class="input-error-msg" id="emailMsg"></p>
                 </div>
 
-                <div class="input-box">
-                    <input class="input-box__field" placeholder="Password" type="password" name="password"
-                        id="password" required>
+                <!-- Email Field -->
+                <div class="space-y-2">
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" name="email" id="email" placeholder="Email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                    <p class="text-sm text-red-500 mt-2" id="emailMsg"></p>
                 </div>
 
-                <div class="input-box">
-                    <input class="input-box__field" placeholder="Confim Password" type="password"
-                        id="password-confirm" required>
+                <!-- Password Fields -->
+                <div class="space-y-2">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" name="password" id="password" placeholder="Password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div class="space-y-2">
+                    <label for="password-confirm" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <input type="password" id="password-confirm" placeholder="Confirm Password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
 
-                <div class="btn-wrapper">
-                    <button class="btn btn-dark btn-100" type="submit" name="submit" id="submit">
+                <!-- Submit Button -->
+                <div class="mt-6">
+                    <button type="submit" name="submit" id="submit" class="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
                         Sign Up
                     </button>
                 </div>
             </form>
-            <p class="new-account-text">
-                Already have account? <a class="new-account-link" href="login.php">Sign in</a>
-            </p>
+
+            <!-- Already have an account link -->
+            <p class="mt-4 text-center text-sm text-gray-600">Already have an account? <a href="login.php" class="text-blue-500 hover:text-blue-700">Sign in</a></p>
         </div>
     </div>
 
@@ -93,11 +103,11 @@ if (isset($_POST['submit'])) {
         const passwordConfirmField = document.querySelector("#password-confirm");
         passwordConfirmField.addEventListener("input", function() {
             if (passwordConfirmField.value === passwordField.value) {
-                console.log("password matched")
+                console.log("Password matched");
             }
-        })
-        document.querySelector("#email").addEventListener('input', function() {
+        });
 
+        document.querySelector("#email").addEventListener('input', function() {
             const formData = new FormData();
             formData.append('email', this.value);
 
@@ -115,6 +125,7 @@ if (isset($_POST['submit'])) {
             })
         })
     </script>
+
 </body>
 
 </html>

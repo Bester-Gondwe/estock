@@ -1,12 +1,6 @@
 <?php
 session_start();
-
-// Example product data (same as cart.php)
-$products = [
-    1 => ["id" => 1, "img" => "images/img/card1.png", "brand" => "Brand A", "price" => 40],
-    2 => ["id" => 2, "img" => "images/img/card2.png", "brand" => "Brand B", "price" => 50],
-    3 => ["id" => 3, "img" => "images/img/card3.png", "brand" => "Brand C", "price" => 60],
-];
+require_once 'models/Database.php'; // Assuming you have a Database model to handle DB queries
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -14,37 +8,90 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Database query to get cart items
+$userId = $_SESSION['user_id'];
+// Example: Get cart items from the database
+$sql = "SELECT p.id, p.img, p.brand, p.price, c.quantity FROM cart c JOIN products p ON c.product_id = p.id WHERE c.user_id = ?";
+$stmt = $db->prepare($sql);
+$stmt->execute([$userId]);
+$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $address = $_POST['address'];
     $paymentMethod = $_POST['payment_method'];
 
-    // Assuming you process the payment here and save the order in a database
-    // For this example, we'll just output the data and clear the cart
+    // Process the payment here and save the order in the database
+    // Example: Save the order in the database (simplified)
+    $orderQuery = "INSERT INTO orders (user_id, address, payment_method) VALUES (?, ?, ?)";
+    $stmt = $db->prepare($orderQuery);
+    $stmt->execute([$userId, $address, $paymentMethod]);
+
+    // Get the last inserted order ID
+    $orderId = $db->lastInsertId();
+
+    // Insert order items
+    foreach ($products as $product) {
+        $orderItemQuery = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
+        $stmt = $db->prepare($orderItemQuery);
+        $stmt->execute([$orderId, $product['id'], $product['quantity'], $product['price']]);
+    }
+
+    // Clear the cart after processing the order
+    $clearCartQuery = "DELETE FROM cart WHERE user_id = ?";
+    $stmt = $db->prepare($clearCartQuery);
+    $stmt->execute([$userId]);
+
+    // Order confirmation HTML output
     echo "<!DOCTYPE html>
     <html lang='en'>
     <head>
         <meta charset='UTF-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <title>Order Confirmation</title>
-        <link rel='stylesheet' href='css/process_checkout.css'>
+        <link rel='stylesheet' href='css/style.css'>
+        <script src='https://cdn.tailwindcss.com'></script>
     </head>
-    <body>
-        <div class='order-summary'>
-            <h1>Thank you for your order!</h1>
-            <h3>Your order has been placed successfully.</h3>
-            <p class='detail'><span>Shipping Address:</span> " . htmlspecialchars($address) . "</p>
-            <p class='detail'><span>Payment Method:</span> " . htmlspecialchars($paymentMethod) . "</p>
-            <a href='index.php' class='confirmation-button'>Continue Shopping</a>
+    <body class='bg-gray-100'>
+        <div class='max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md mt-12'>
+            <h1 class='text-2xl font-semibold text-center text-green-600'>Thank you for your order!</h1>
+            <h3 class='text-center text-lg mt-2'>Your order has been placed successfully.</h3>
+
+            <div class='mt-6'>
+                <h4 class='text-lg font-semibold'>Order Summary</h4>
+                <div class='mt-4'>
+                    <p class='text-sm text-gray-600'><span class='font-semibold'>Shipping Address:</span> " . htmlspecialchars($address) . "</p>
+                    <p class='text-sm text-gray-600'><span class='font-semibold'>Payment Method:</span> " . htmlspecialchars($paymentMethod) . "</p>
+                </div>
+            </div>
+
+            <div class='mt-6'>
+                <h4 class='text-lg font-semibold'>Your Products</h4>
+                <div class='mt-4'>
+                    <ul class='space-y-4'>
+                        ";
+                        foreach ($products as $product) {
+                            echo "<li class='flex items-center justify-between'>
+                                    <div class='flex items-center'>
+                                        <img src='" . htmlspecialchars($product['img']) . "' alt='" . htmlspecialchars($product['brand']) . "' class='w-16 h-16 object-cover rounded-md'>
+                                        <div class='ml-4'>
+                                            <p class='font-semibold'>" . htmlspecialchars($product['brand']) . "</p>
+                                            <p class='text-sm text-gray-500'>Quantity: " . htmlspecialchars($product['quantity']) . "</p>
+                                            <p class='text-sm text-gray-500'>Price: $" . htmlspecialchars($product['price']) . "</p>
+                                        </div>
+                                    </div>
+                                </li>";
+                        }
+                        echo "
+                    </ul>
+                </div>
+            </div>
+
+            <div class='mt-6 text-center'>
+                <a href='index.php' class='inline-block px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700'>Continue Shopping</a>
+            </div>
         </div>
     </body>
     </html>";
-    
-    // Clear the cart
-    $_SESSION['cart'] = [];
-} else {
-    // Redirect if the form is not submitted properly
-    header("Location: checkout.php");
-    exit();
 }
 ?>

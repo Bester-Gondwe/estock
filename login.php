@@ -39,7 +39,6 @@ if (isset($_POST['submit'])) {
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -50,30 +49,42 @@ if (isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="css/style.css">
+    <!-- Include Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-    <div class="wrapper login-container">
-        <div class="form-wrapper">
-            <form action="" method="post">
-                <h1 class="form-header">Sign in</h1>
-                <div class="input-box">
-                    <input class="input-box__field" type="email" placeholder="Email" name="email" id="email">
-                </div>
-                <div class="input-box">
+<body class="bg-gray-100">
 
-                    <input class="input-box__field" type="password" placeholder="Password" name="password" id="password">
+    <div class="flex justify-center items-center min-h-screen bg-gray-100">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
+            <h1 class="text-2xl font-bold text-center text-gray-700 mb-6">Sign in</h1>
+
+            <form action="" method="post" class="space-y-6">
+                <div class="space-y-2">
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" name="email" id="email" placeholder="Email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
-                <div class="login-form-bottom">
-                    <a href="">Forgot your password</a>
+
+                <div class="space-y-2">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" name="password" id="password" placeholder="Password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
-                <button class="btn btn-dark btn-100" type="submit" name="submit">Login</button>
+
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" name="keepLoggedCheck" id="keepLoggedCheck" class="h-4 w-4 text-blue-500 border-gray-300 rounded">
+                        <label for="keepLoggedCheck" class="text-sm text-gray-600">Keep me logged in</label>
+                    </div>
+                    <a href="#" class="text-sm text-blue-500 hover:text-blue-700">Forgot your password?</a>
+                </div>
+
+                <button type="submit" name="submit" class="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Login</button>
             </form>
-            <p class="new-account-text">
-                New to eStock? <a class="new-account-link" href="register.php">Sign up</a>
-            </p>
+
+            <p class="mt-4 text-center text-sm text-gray-600">New to eStock? <a href="register.php" class="text-blue-500 hover:text-blue-700">Sign up</a></p>
         </div>
     </div>
+
 </body>
 
 </html>

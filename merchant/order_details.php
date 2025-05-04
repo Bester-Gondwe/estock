@@ -4,105 +4,92 @@ require_once "../models/Order.php";
 $order = new Order();
 
 $customerOder = $order->getOrderById($_GET['orderID']);
-
 $orderProducts = $order->getOrderDetails($_GET['orderID']);
-
 ?>
 
-<div class="sub-header">
-    <div>
+<div class="bg-gray-50 p-6 rounded-lg shadow-md">
+    <div class="text-xl font-semibold mb-4">
         <p>Orders List</p>
-        <p>Home > Orders Details</p>
+        <p class="text-sm text-gray-500">Home > Orders Details</p>
     </div>
-</div>
-<div class="order-details">
-    <div class="card">
-        <div class="order-details-header">
-            <p class="order-details-header__title">Order ID:#<?php echo $_GET['orderID'] ?></p>
-            <p class="order-details-header__status"><?php echo $customerOder['order_status'] ?></p>
+
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <div class="flex justify-between items-center mb-4">
+            <p class="text-2xl font-bold text-gray-700">Order ID:#<?php echo $_GET['orderID'] ?></p>
+            <p class="text-sm text-gray-500"><?php echo $customerOder['order_status'] ?></p>
         </div>
-        <div class="order-details-sub-header">
-            <div class="order-deatils__calender">
-                <img class="order-deatils__calender-icon" src="" alt="">
-                <p class="order-deatils__calender-text"><?php
-                                                        $date = new DateTime($customerOder['order_date']);
-                                                        $formattedDate = $date->format('M jS, Y');
-                                                        echo $formattedDate ?> </p>
+
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex items-center space-x-2">
+                <img class="h-6 w-6" src="../images/calendar.svg" alt="Calendar Icon">
+                <p class="text-gray-600"><?php
+                                            $date = new DateTime($customerOder['order_date']);
+                                            $formattedDate = $date->format('M jS, Y');
+                                            echo $formattedDate; ?> </p>
             </div>
 
-            <div class="order-details__actions">
-                <select class="order-details__status-action" name="orderStatus" id="orderStatus" >
-                    <option>Derivered</option>
-                    <option>Cancled</option>
+            <div class="flex space-x-4">
+                <select class="border border-gray-300 rounded-lg p-2" name="orderStatus" id="orderStatus">
+                    <option>Delivered</option>
+                    <option>Cancelled</option>
                 </select>
-                <button class="btn" data-id="<?php echo $_GET['orderID'] ?>" id="saveBtn">save</button>
+                <button class="bg-blue-500 text-white px-4 py-2 rounded-lg" data-id="<?php echo $_GET['orderID'] ?>" id="saveBtn">Save</button>
             </div>
         </div>
-        <div class="orders-details__info-wrapper">
-            <div class="orders-details__info-card orders-details-shipping">
-                <img class="orders-details__info-icon" src="../images/online-delivery-svgrepo-com.svg" alt="Orders Icon">
-                <div class="orders-details__info">
-                    <p class="orders-details__info-title">Customer</p>
-                    <p class="rders-details__info-text">Full Name: <?php echo $customerOder['customer_name'] ?></p>
-                    <p class="rders-details__info-text">Email: <?php echo $customerOder['email'] ?></p>
-                    <p class="rders-details__info-text">Phone: +23893843974</p>
-                </div>
-            </div>
-            <div class="orders-details__info-card orders-details-shipping">
-                <img class="orders-details__info-icon" src="../images/online-delivery-svgrepo-com.svg" alt="Orders Icon">
-                <div class="orders-details__info">
-                    <p class="orders-details__info-title">Order Info</p>
-                    <p class="rders-details__info-text">Shipping : Express</p>
-                    <p class="rders-details__info-text">Payment Method : PayPal</p>
-                    <p class="rders-details__info-text">Status : <?php echo $customerOder['order_status'] ?></p>
-                </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                <img class="h-12 w-12 mb-4" src="../images/user.svg" alt="Customer Icon">
+                <p class="font-semibold text-lg text-gray-700">Customer</p>
+                <p class="text-sm text-gray-600">Full Name: <?php echo $customerOder['customer_name'] ?></p>
+                <p class="text-sm text-gray-600">Email: <?php echo $customerOder['email'] ?></p>
+                <p class="text-sm text-gray-600">Phone: +23893843974</p>
             </div>
 
-            <div class="orders-details__info-card orders-details-shipping">
-                <img class="orders-details__info-icon" src="../images/online-delivery-svgrepo-com.svg" alt="Orders Icon">
+            <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                <img class="h-12 w-12 mb-4" src="../images/package.svg" alt="Order Info Icon">
+                <p class="font-semibold text-lg text-gray-700">Order Info</p>
+                <p class="text-sm text-gray-600">Shipping: Express</p>
+                <p class="text-sm text-gray-600">Payment Method: PayPal</p>
+                <p class="text-sm text-gray-600">Status: <?php echo $customerOder['order_status'] ?></p>
+            </div>
 
-                <div class="orders-details__info">
-                    <p class="orders-details__info-title">Derivery To</p>
-                    <p class="rders-details__info-text">Address : </p>
-                </div>
+            <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                <img class="h-12 w-12 mb-4" src="../images/location.svg" alt="Delivery To Icon">
+                <p class="font-semibold text-lg text-gray-700">Delivery To</p>
+                <p class="text-sm text-gray-600">Address: </p>
             </div>
         </div>
     </div>
 
-
-
-
-    <div class="card order-details__products">
-        <h4 class="order-details__products-title">Products</h4>
-        <table class="order-details__products-table">
+    <div class="bg-white p-6 rounded-lg shadow-md mt-6">
+        <h4 class="text-xl font-semibold text-gray-700 mb-4">Products</h4>
+        <table class="w-full text-left table-auto">
             <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>Order ID</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
+                <tr class="border-b">
+                    <th class="py-2 px-4 text-sm font-medium text-gray-700">Product Name</th>
+                    <th class="py-2 px-4 text-sm font-medium text-gray-700">Order ID</th>
+                    <th class="py-2 px-4 text-sm font-medium text-gray-700">Quantity</th>
+                    <th class="py-2 px-4 text-sm font-medium text-gray-700">Total</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 foreach ($orderProducts as $orderProduct) {
-                    echo " <tr id='row-1'>
-                    <td>{$orderProduct['product_name']}</td>
-                    <td>#{$orderProduct['order_id']}</td>
-                    <td>{$orderProduct['quantity']}</td>
-                    <td>MWK{$orderProduct['totalPrice']}</td>
-                </tr>
-                ";
+                    echo "<tr class='border-b'>
+                        <td class='py-2 px-4 text-sm text-gray-600'>{$orderProduct['product_name']}</td>
+                        <td class='py-2 px-4 text-sm text-gray-600'>#{$orderProduct['order_id']}</td>
+                        <td class='py-2 px-4 text-sm text-gray-600'>{$orderProduct['quantity']}</td>
+                        <td class='py-2 px-4 text-sm text-gray-600'>MWK{$orderProduct['totalPrice']}</td>
+                    </tr>";
                 }
                 ?>
             </tbody>
             <tfoot>
-                <tfoot>
-                    <tr>
-                        <td colspan="3">Total</td>
-                        <td> $180</td>
-                    </tr>
-                </tfoot>
+                <tr class="border-t">
+                    <td colspan="3" class="py-2 px-4 text-sm font-semibold text-gray-700">Total</td>
+                    <td class="py-2 px-4 text-sm text-gray-700">$180</td>
+                </tr>
             </tfoot>
         </table>
     </div>

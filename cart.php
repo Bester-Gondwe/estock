@@ -1,105 +1,91 @@
 <?php
 session_start();
 require_once "models/Product.php";
-$tableRow = '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <?php include "header.php" ?>
-<link rel="stylesheet" href="css/cart.css">
 
+<body class="bg-gray-100 text-gray-800">
+    <?php include 'navbar.php' ?>
 
-<body>
-    <div class="wrapper cart-wrapper">
-        <?php include 'navbar.php' ?>
-        <div class="cart-content">
+    <div class="max-w-6xl mx-auto p-6 mt-8">
+        <h2 class="text-2xl font-semibold mb-4">🛒 Your Shopping Cart</h2>
+        <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+            <table class="min-w-full text-sm text-left">
+                <thead class="bg-gray-200 uppercase text-xs font-semibold text-gray-600">
+                    <tr>
+                        <th class="p-3"></th>
+                        <th class="p-3">Name</th>
+                        <th class="p-3">Price</th>
+                        <th class="p-3">Quantity</th>
+                        <th class="p-3">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody" class="divide-y divide-gray-200"></tbody>
+                <!-- Data from JS -->
+            </table>
+        </div>
 
-            <div class="table__wrapper">
-                <h4 class="table-title">Your Cart</h4>
-                <table class="cart-table">
-                    <thead>
-                        <th></th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Subtotal</th>
-                    </thead>
-                    <tbody class="cart-table__body" id="tbody"> </tbody>
-                </table>
-                <div class="">
-                    <div class="cart-footer">
-                        <?php
-                        if (isset($_SESSION['user_id'])) {
-                            echo "<button class='btn btn-dark' id='paypal-button' onclick='proceedOrder()'>Proceed</button>";
-                        } else {
-                            echo "<h4>You need to <a href='login.php'>Login</a> to checkout.</h4>";
-                        }
-                        ?>
-                    </div>
-                </div>
-            </div>
+        <div class="mt-6 text-right">
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <button onclick="proceedOrder()" id="paypal-button" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded shadow">
+                    Proceed to Checkout
+                </button>
+            <?php else: ?>
+                <p class="text-red-500 font-medium">You need to <a href="login.php" class="text-blue-500 underline">Login</a> to checkout.</p>
+            <?php endif; ?>
         </div>
     </div>
-    <script src="js/main.js"></script>
+
     <script>
         getDetails();
 
-        function proceedOrder() {
-            fetch("process_order.php", {
-                    method: "POST",
-                }).then(response => response.text())
-                .then(data => {
-                    alert(data)
-                    location.reload();
-                })
-        }
-
         function getDetails() {
             fetch('cart_details.php')
-                .then(response => response.text())
-                .then(data => {
-                    document.querySelector("#tbody").innerHTML = data;
-                })
+                .then(res => res.text())
+                .then(html => {
+                    document.querySelector('#tbody').innerHTML = html;
+                });
         }
 
+        function proceedOrder() {
+            fetch("process_order.php", { method: "POST" })
+                .then(res => res.text())
+                .then(data => {
+                    alert(data);
+                    location.reload();
+                });
+        }
 
         function deleteFromCart(productId) {
             const formData = new FormData();
             formData.append("productID", productId);
             fetch("delete_from_cart.php", {
-                    method: "POST",
-                    body: formData
-                }).then(response => response.text())
-                .then(data => {
-                    if (data === "error") {
-                        alert("Failed to delete product from cart.");
-                    } else {
-                        document.querySelector("#cartCount").innerHTML = data; // update cart
-                        getDetails();
-                    }
-
-                })
-        }
-
-        document.addEventListener('change', function(event) {
-            // check the input that have changed
-            if (event.target.tagName.toLowerCase() === 'input') {
-                if (event.target.id == "quantityField") {
-                    const updateFormData = new FormData();
-                    updateFormData.append('productID', event.target.dataset.id)
-                    updateFormData.append('quantity', event.target.value);
-
-                    fetch('update_cart.php', {
-                        method: "POST",
-                        body: updateFormData
-                    }).then(response => response.text()).then(data => {
-
-                    })
+                method: "POST",
+                body: formData
+            }).then(res => res.text())
+              .then(data => {
+                if (data === "error") {
+                    alert("Failed to delete item.");
+                } else {
+                    document.querySelector("#cartCount").innerText = data;
                     getDetails();
                 }
+            });
+        }
+
+        document.addEventListener("change", function(e) {
+            if (e.target.id === "quantityField") {
+                const formData = new FormData();
+                formData.append("productID", e.target.dataset.id);
+                formData.append("quantity", e.target.value);
+                fetch("update_cart.php", {
+                    method: "POST",
+                    body: formData
+                }).then(() => getDetails());
             }
-        }, true); // 'true' makes this capture the event during the capturing phase
+        }, true);
     </script>
 </body>
-
 </html>
