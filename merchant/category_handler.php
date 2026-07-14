@@ -1,15 +1,10 @@
 <?php
-session_start();
+require_once __DIR__ . '/../config/bootstrap.php';
+require_merchant();
 
-header("Content-Type: application/json");
+header('Content-Type: application/json');
 
-if (!isset($_SESSION['user_id'])) {
-    http_response_code(401);
-    echo json_encode(["error" => "Unauthorized"]);
-    exit;
-}
-
-require_once "../models/Category.php";
+require_once __DIR__ . '/../models/Category.php';
 $category = new Category();
 $userId = $_SESSION['user_id'];
 $method = $_SERVER['REQUEST_METHOD'];
@@ -17,56 +12,54 @@ $method = $_SERVER['REQUEST_METHOD'];
 switch ($method) {
     case 'GET':
         if (isset($_GET['id'])) {
-            $id = intval($_GET['id']);
-            $categoryData = $category->getCategoryById($id);
-            echo json_encode($categoryData);
+            $id = (int) $_GET['id'];
+            echo json_encode($category->getCategoryById($id));
         } else {
-            // Return all categories for logged-in merchant
-            $categories = $category->countMerchantCategories($userId);
-            echo json_encode($categories);
+            echo json_encode($category->countMerchantCategories($userId));
         }
         break;
 
     case 'POST':
-        $categoryName = $_POST['categoryName'] ?? null;
+        $categoryName = trim($_POST['categoryName'] ?? '');
         $categoryId = $_POST['categoryId'] ?? null;
 
-        if (!$categoryName) {
-            echo json_encode(["error" => "Category name is required"]);
+        if ($categoryName === '') {
+            echo json_encode(['error' => 'Category name is required']);
             exit;
         }
 
         if ($categoryId) {
-            // Update category if categoryId exists
-            if ($category->updateCategory($categoryId, $categoryName)) {
-                echo json_encode(["message" => "Category updated successfully"]);
-            } else {
-                echo json_encode(["error" => "Category update failed"]);
-            }
+            $result = $category->updateCategory($categoryId, $categoryName);
+            echo json_encode(isset($result['message'])
+                ? ['message' => $result['message']]
+                : ['error' => $result['error'] ?? 'Category update failed']);
         } else {
-            // Create new category if no categoryId exists
-            if ($category->addCategory($categoryName)) {
-                echo json_encode(["message" => "Category created successfully"]);
-            } else {
-                echo json_encode(["error" => "Category creation failed"]);
-            }
+            $result = $category->addCategory($categoryName);
+            echo json_encode(isset($result['message'])
+                ? ['message' => $result['message']]
+                : ['error' => $result['error'] ?? 'Category creation failed']);
         }
         break;
 
     case 'DELETE':
-        // Parse raw URL data manually
-        parse_str(file_get_contents("php://input"), $deleteData);
+        parse_str(file_get_contents('php://input'), $deleteData);
         $categoryID = $deleteData['categoryID'] ?? $_GET['categoryID'] ?? null;
 
-        if ($categoryID && $category->deleteCategory($categoryID)) {
-            echo json_encode(["message" => "Category deleted successfully"]);
+        if (!$categoryID) {
+            echo json_encode(['error' => 'Category ID required']);
+            exit;
+        }
+
+        $result = $category->deleteCategory($categoryID);
+        if (isset($result['message'])) {
+            echo json_encode(['message' => $result['message']]);
         } else {
-            echo json_encode(["error" => "Category deletion failed"]);
+            echo json_encode(['error' => $result['error'] ?? 'Category deletion failed']);
         }
         break;
 
     default:
         http_response_code(405);
-        echo json_encode(["error" => "Method not allowed"]);
+        echo json_encode(['error' => 'Method not allowed']);
         break;
 }
