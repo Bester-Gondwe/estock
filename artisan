@@ -31,6 +31,7 @@ $flags = array_slice($argv, 2);
 
 try {
     match ($command) {
+        'key:generate', 'generate:key' => generateKey($root, in_array('--show', $flags, true)),
         'migrate' => migrate($root, false, in_array('--seed', $flags, true)),
         'migrate:fresh' => migrate($root, true, in_array('--seed', $flags, true)),
         'db:seed' => seed($root),
@@ -185,12 +186,54 @@ function seed(string $root): void
     writeln('  merchant@estock.test');
 }
 
+function generateKey(string $root, bool $showOnly = false): void
+{
+    $key = 'base64:' . base64_encode(random_bytes(32));
+
+    if ($showOnly) {
+        writeln("<info>{$key}</info>");
+        return;
+    }
+
+    $envPath = $root . '/.env';
+    $examplePath = $root . '/.env.example';
+
+    if (!is_readable($envPath)) {
+        if (is_readable($examplePath)) {
+            copy($examplePath, $envPath);
+            writeln('<comment>Created .env from .env.example</comment>');
+        } else {
+            throw new RuntimeException('.env file not found. Create one from .env.example first.');
+        }
+    }
+
+    $contents = file_get_contents($envPath);
+    if ($contents === false) {
+        throw new RuntimeException('Unable to read .env file.');
+    }
+
+    if (preg_match('/^APP_KEY=/m', $contents)) {
+        $contents = preg_replace('/^APP_KEY=.*$/m', 'APP_KEY=' . $key, $contents, 1);
+    } else {
+        $contents = rtrim($contents) . PHP_EOL . 'APP_KEY=' . $key . PHP_EOL;
+    }
+
+    if (file_put_contents($envPath, $contents) === false) {
+        throw new RuntimeException('Unable to write APP_KEY to .env');
+    }
+
+    writeln('<info>Application key set successfully.</info>');
+}
+
 function showHelp(): void
 {
     writeln('eStock Artisan');
     writeln('');
     writeln('Available commands:');
-    writeln('  php artisan migrate              Run pending migrations');
+    writeln('  php artisan key:generate          Set the application key in .env');
+    writeln('  php artisan key:generate --show   Display a key without writing .env');
+    writeln('  php artisan generate:key          Alias of key:generate');
+    writeln('  php artisan migrate               Run pending migrations');
     writeln('  php artisan migrate:fresh         Drop all tables and re-run migrations');
     writeln('  php artisan migrate:fresh --seed  Fresh migrate + seed demo data');
     writeln('  php artisan db:seed               Seed the database');

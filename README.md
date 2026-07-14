@@ -26,21 +26,29 @@ composer install
 copy .env.example .env
 ```
 
-5. Edit `.env` if needed (defaults work with Laragon's root user and empty password):
+5. Generate the application key:
+
+```bash
+php artisan key:generate
+```
+
+6. Edit `.env` if needed (defaults work with Laragon's root user and empty password):
 
 ```env
+APP_NAME=eStock
+APP_URL=http://estock.test
+APP_KEY=
+APP_CURRENCY=MWK
+APP_DEBUG=true
+
 DB_HOST=localhost
 DB_PORT=3306
 DB_NAME=estock
 DB_USER=root
 DB_PASS=
-APP_NAME=eStock
-APP_URL=http://estock.test
-APP_CURRENCY=MWK
-APP_DEBUG=true
 ```
 
-6. Create / migrate the database:
+7. Create / migrate the database:
 
 ```bash
 php artisan migrate:fresh --seed
@@ -59,7 +67,7 @@ Or import the SQL dump manually:
 mysql -u root < sql/estock_file.sql
 ```
 
-7. Ensure the uploads folder is writable:
+8. Ensure the uploads folder is writable:
 
 ```bash
 mkdir uploads
@@ -71,7 +79,7 @@ On Linux/macOS:
 chmod -R 775 uploads
 ```
 
-8. Open the app:
+9. Open the app:
 
 - Virtual host: http://estock.test  
 - Or: http://localhost/estock/
@@ -144,6 +152,7 @@ composer update
 composer dump-autoload
 
 # Database
+php artisan key:generate
 php artisan migrate
 php artisan migrate:fresh --seed
 php artisan db:seed
