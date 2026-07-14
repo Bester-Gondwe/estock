@@ -86,9 +86,6 @@ class Database
             $stmt->execute($params ?? []);
             return $stmt;
         } catch (PDOException $ex) {
-            if (env('APP_DEBUG', false)) {
-                echo 'Execution error: ' . $ex->getMessage();
-            }
             throw $ex;
         }
     }

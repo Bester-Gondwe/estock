@@ -93,16 +93,34 @@ class Order extends Database
         $offset = (int) $offset;
         $limit = (int) $limit;
         $query = "SELECT
-            orders.*,
+            orders.order_id,
+            orders.user_id,
+            orders.order_date,
+            orders.order_status,
+            orders.amount,
+            orders.shipping_address,
+            orders.payment_method,
+            orders.notes,
             CONCAT(users.first_name, ' ', users.last_name) AS customer_name,
-            products.product_name,
-            order_details.quantity
+            GROUP_CONCAT(DISTINCT products.product_name ORDER BY products.product_name SEPARATOR ', ') AS product_name,
+            COUNT(DISTINCT products.product_id) AS item_count,
+            SUM(order_details.quantity) AS quantity
             FROM orders
             JOIN users ON users.user_id = orders.user_id
             JOIN order_details ON orders.order_id = order_details.order_id
             JOIN products ON order_details.product_id = products.product_id
             WHERE products.user_id = :user_id
-            GROUP BY orders.order_id
+            GROUP BY
+                orders.order_id,
+                orders.user_id,
+                orders.order_date,
+                orders.order_status,
+                orders.amount,
+                orders.shipping_address,
+                orders.payment_method,
+                orders.notes,
+                users.first_name,
+                users.last_name
             ORDER BY orders.order_date DESC, orders.order_id DESC
             LIMIT {$offset}, {$limit}";
         $stmt = $this->executeQuery($query, ['user_id' => $userId]);
