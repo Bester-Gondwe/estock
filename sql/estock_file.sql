@@ -141,8 +141,8 @@ CREATE TABLE `inventory_movements` (
 
 -- Demo seed data (password for both: password123)
 INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `email`, `passwd`, `phone`, `address`) VALUES
-(1, 'Demo', 'Customer', 'customer@estock.test', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '+265999000001', 'Lilongwe, Malawi'),
-(2, 'Demo', 'Merchant', 'merchant@estock.test', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '+265999000002', 'Blantyre, Malawi');
+(1, 'Demo', 'Customer', 'customer@estock.test', '$2y$10$twFrP9oyiMSyH64LPZ0iResmx4rYRfN9FXxfJ.tLhUtg2LmBuzR3y', '+265999000001', 'Lilongwe, Malawi'),
+(2, 'Demo', 'Merchant', 'merchant@estock.test', '$2y$10$twFrP9oyiMSyH64LPZ0iResmx4rYRfN9FXxfJ.tLhUtg2LmBuzR3y', '+265999000002', 'Blantyre, Malawi');
 
 INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
 (1, 1),

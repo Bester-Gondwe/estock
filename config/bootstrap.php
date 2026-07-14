@@ -62,7 +62,7 @@ if (!function_exists('require_login')) {
     function require_login(): void
     {
         if (empty($_SESSION['user_id'])) {
-            header('Location: /login.php');
+            header('Location: login.php');
             exit;
         }
     }
@@ -71,7 +71,10 @@ if (!function_exists('require_login')) {
 if (!function_exists('require_merchant')) {
     function require_merchant(): void
     {
-        require_login();
+        if (empty($_SESSION['user_id'])) {
+            header('Location: ../login.php');
+            exit;
+        }
         if (($_SESSION['user_role'] ?? '') !== 'Merchant') {
             http_response_code(403);
             echo 'Access denied. Merchant account required.';
@@ -83,9 +86,12 @@ if (!function_exists('require_merchant')) {
 if (!function_exists('require_customer')) {
     function require_customer(): void
     {
-        require_login();
-        if (($_SESSION['user_role'] ?? '') !== 'Customer') {
-            header('Location: /merchant/');
+        if (empty($_SESSION['user_id'])) {
+            header('Location: login.php');
+            exit;
+        }
+        if (($_SESSION['user_role'] ?? '') === 'Merchant') {
+            header('Location: merchant/');
             exit;
         }
     }
