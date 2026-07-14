@@ -1,107 +1,51 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: localhost
--- Generation Time: Jan 16, 2025 at 01:37 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- eStock database schema
+-- Compatible with MySQL 5.7+ / MariaDB 10.3+
+-- Import via: mysql -u root estock < sql/estock_file.sql
+-- Or create DB first: CREATE DATABASE estock CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `estock`
---
+CREATE DATABASE IF NOT EXISTS `estock` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `estock`;
 
 -- --------------------------------------------------------
-
---
--- Table structure for table `categories`
---
 
 CREATE TABLE `categories` (
-  `category_id` int(11) NOT NULL,
-  `category_name` varchar(50) NOT NULL
+  `category_id` int(11) NOT NULL AUTO_INCREMENT,
+  `category_name` varchar(100) NOT NULL,
+  PRIMARY KEY (`category_id`),
+  UNIQUE KEY `category_name` (`category_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `orders`
---
-
-CREATE TABLE `orders` (
-  `order_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `order_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `order_status` varchar(10) NOT NULL,
-  `amount` int(11) NOT NULL DEFAULT 0
+CREATE TABLE `users` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(40) NOT NULL,
+  `last_name` varchar(40) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `passwd` varchar(255) NOT NULL,
+  `phone` varchar(30) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
-
---
--- Table structure for table `order_details`
---
-
-CREATE TABLE `order_details` (
-  `order_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `products`
---
-
-CREATE TABLE `products` (
-  `product_id` int(11) NOT NULL,
-  `product_name` varchar(50) NOT NULL,
-  `product_description` varchar(50) NOT NULL,
-  `product_price` double NOT NULL,
-  `category_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product_images`
---
-
-CREATE TABLE `product_images` (
-  `image_id` int(11) NOT NULL,
-  `file_name` varchar(255) NOT NULL,
-  `is_primary` tinyint(1) NOT NULL,
-  `product_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `roles`
---
 
 CREATE TABLE `roles` (
-  `role_id` int(11) NOT NULL,
-  `role_name` varchar(16) NOT NULL
+  `role_id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(16) NOT NULL,
+  PRIMARY KEY (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `roles`
---
 
 INSERT INTO `roles` (`role_id`, `role_name`) VALUES
 (1, 'Customer'),
@@ -109,165 +53,114 @@ INSERT INTO `roles` (`role_id`, `role_name`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
+CREATE TABLE `user_roles` (
   `user_id` int(11) NOT NULL,
-  `first_name` varchar(40) NOT NULL,
-  `last_name` varchar(40) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `passwd` varchar(255) NOT NULL
+  `role_id` int(11) NOT NULL,
+  KEY `role_id` (`role_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `user_roles_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_roles_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `user_roles`
---
-
-CREATE TABLE `user_roles` (
+CREATE TABLE `products` (
+  `product_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_name` varchar(150) NOT NULL,
+  `product_description` text NOT NULL,
+  `product_price` decimal(12,2) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 0,
+  `sku` varchar(64) DEFAULT NULL,
+  `low_stock_threshold` int(11) NOT NULL DEFAULT 5,
   `user_id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`product_id`),
+  KEY `user_id` (`user_id`),
+  KEY `category_id` (`category_id`),
+  UNIQUE KEY `sku` (`sku`),
+  CONSTRAINT `products_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `products_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Indexes for dumped tables
---
+-- --------------------------------------------------------
 
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`category_id`),
-  ADD UNIQUE KEY `category_name` (`category_name`);
+CREATE TABLE `product_images` (
+  `image_id` int(11) NOT NULL AUTO_INCREMENT,
+  `file_name` varchar(255) NOT NULL,
+  `is_primary` tinyint(1) NOT NULL DEFAULT 0,
+  `product_id` int(11) NOT NULL,
+  PRIMARY KEY (`image_id`),
+  KEY `product_images_ibfk_1` (`product_id`),
+  CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Indexes for table `orders`
---
-ALTER TABLE `orders`
-  ADD PRIMARY KEY (`order_id`),
-  ADD KEY `user_id` (`user_id`);
+-- --------------------------------------------------------
 
---
--- Indexes for table `order_details`
---
-ALTER TABLE `order_details`
-  ADD KEY `order_id` (`order_id`),
-  ADD KEY `product_id` (`product_id`);
+CREATE TABLE `orders` (
+  `order_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `order_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `order_status` varchar(20) NOT NULL DEFAULT 'Pending',
+  `amount` decimal(12,2) NOT NULL DEFAULT 0.00,
+  `shipping_address` varchar(255) DEFAULT NULL,
+  `payment_method` varchar(50) DEFAULT 'Cash on Delivery',
+  `notes` text DEFAULT NULL,
+  PRIMARY KEY (`order_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Indexes for table `products`
---
-ALTER TABLE `products`
-  ADD PRIMARY KEY (`product_id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `category_id` (`category_id`);
+-- --------------------------------------------------------
 
---
--- Indexes for table `product_images`
---
-ALTER TABLE `product_images`
-  ADD PRIMARY KEY (`image_id`),
-  ADD KEY `product_images_ibfk_1` (`product_id`);
+CREATE TABLE `order_details` (
+  `order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `unit_price` decimal(12,2) NOT NULL DEFAULT 0.00,
+  KEY `order_id` (`order_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `order_details_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Indexes for table `roles`
---
-ALTER TABLE `roles`
-  ADD PRIMARY KEY (`role_id`);
+-- --------------------------------------------------------
 
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `email` (`email`);
+CREATE TABLE `inventory_movements` (
+  `movement_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `change_qty` int(11) NOT NULL,
+  `reason` varchar(100) NOT NULL,
+  `reference_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`movement_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `inventory_movements_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Indexes for table `user_roles`
---
-ALTER TABLE `user_roles`
-  ADD KEY `role_id` (`role_id`),
-  ADD KEY `user_id` (`user_id`);
+-- Demo seed data (password for both: password123)
+INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `email`, `passwd`, `phone`, `address`) VALUES
+(1, 'Demo', 'Customer', 'customer@estock.test', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '+265999000001', 'Lilongwe, Malawi'),
+(2, 'Demo', 'Merchant', 'merchant@estock.test', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '+265999000002', 'Blantyre, Malawi');
 
---
--- AUTO_INCREMENT for dumped tables
---
+INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
+(1, 1),
+(2, 2);
 
---
--- AUTO_INCREMENT for table `categories`
---
-ALTER TABLE `categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT;
+INSERT INTO `categories` (`category_id`, `category_name`) VALUES
+(1, 'Electronics'),
+(2, 'Fashion'),
+(3, 'Home & Living'),
+(4, 'Groceries');
 
---
--- AUTO_INCREMENT for table `orders`
---
-ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT;
+INSERT INTO `products` (`product_id`, `product_name`, `product_description`, `product_price`, `category_id`, `quantity`, `sku`, `low_stock_threshold`, `user_id`) VALUES
+(1, 'Wireless Bluetooth Headphones', 'Comfortable over-ear headphones with noise cancellation and 30-hour battery life.', 45000.00, 1, 25, 'EL-HEAD-001', 5, 2),
+(2, 'Smart LED Desk Lamp', 'Adjustable brightness LED lamp with USB charging port.', 18500.00, 1, 40, 'EL-LAMP-002', 5, 2),
+(3, 'Classic Cotton T-Shirt', 'Soft 100% cotton unisex t-shirt available in multiple sizes.', 8500.00, 2, 60, 'FA-TSHIRT-003', 10, 2),
+(4, 'Ceramic Coffee Mug Set', 'Set of 4 durable ceramic mugs — dishwasher safe.', 12000.00, 3, 30, 'HL-MUG-004', 5, 2),
+(5, 'Organic Honey 500g', 'Pure organic honey sourced from local farms.', 6500.00, 4, 50, 'GR-HONEY-005', 8, 2);
 
---
--- AUTO_INCREMENT for table `products`
---
-ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `product_images`
---
-ALTER TABLE `product_images`
-  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `roles`
---
-ALTER TABLE `roles`
-  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `orders`
---
-ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `order_details`
---
-ALTER TABLE `order_details`
-  ADD CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `order_details_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `products`
---
-ALTER TABLE `products`
-  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `products_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `product_images`
---
-ALTER TABLE `product_images`
-  ADD CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `user_roles`
---
-ALTER TABLE `user_roles`
-  ADD CONSTRAINT `user_roles_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `user_roles_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

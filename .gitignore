@@ -1,0 +1,13 @@
+.env
+uploads/*
+!uploads/.gitkeep
+!.env.example
+.DS_Store
+Thumbs.db
+*.log
+vendor/
+node_modules/
+.idea/
+.vscode/
+*.swp
+*~
