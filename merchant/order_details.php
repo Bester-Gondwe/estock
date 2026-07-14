@@ -1,117 +1,103 @@
 <?php
-require_once "../models/Order.php";
+require_once __DIR__ . '/../models/Order.php';
 
 $order = new Order();
+$orderId = (int) ($_GET['orderID'] ?? 0);
 
-$customerOder = $order->getOrderById($_GET['orderID']);
-$orderProducts = $order->getOrderDetails($_GET['orderID']);
+if ($orderId < 1 || !$order->merchantOwnsOrder($_SESSION['user_id'], $orderId)) {
+    echo '<p class="text-red-600">Order not found or you do not have access.</p>';
+    return;
+}
+
+$customerOrder = $order->getOrderById($orderId);
+$orderProducts = $order->getOrderDetails($orderId);
+$date = new DateTime($customerOrder['order_date']);
+$statuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
 ?>
 
-<div class="bg-gray-50 p-6 rounded-lg shadow-md">
-    <div class="text-xl font-semibold mb-4">
-        <p>Orders List</p>
-        <p class="text-sm text-gray-500">Home > Orders Details</p>
+<div class="mb-6">
+    <p class="text-sm text-slate-500"><a href="./index.php?p=orders" class="text-emerald-600 hover:underline">Orders</a> &gt; Details</p>
+    <div class="flex flex-wrap justify-between items-center gap-4 mt-2">
+        <h2 class="text-2xl font-bold">Order #<?= $orderId ?></h2>
+        <span class="text-sm px-3 py-1 rounded-full bg-slate-100"><?= htmlspecialchars($customerOrder['order_status']) ?></span>
     </div>
+    <p class="text-slate-500 text-sm mt-1"><?= $date->format('M j, Y \a\t g:i A') ?></p>
+</div>
 
-    <div class="bg-white p-6 rounded-lg shadow-md">
-        <div class="flex justify-between items-center mb-4">
-            <p class="text-2xl font-bold text-gray-700">Order ID:#<?php echo $_GET['orderID'] ?></p>
-            <p class="text-sm text-gray-500"><?php echo $customerOder['order_status'] ?></p>
-        </div>
-
-        <div class="flex justify-between items-center mb-6">
-            <div class="flex items-center space-x-2">
-                <img class="h-6 w-6" src="../images/calendar.svg" alt="Calendar Icon">
-                <p class="text-gray-600"><?php
-                                            $date = new DateTime($customerOder['order_date']);
-                                            $formattedDate = $date->format('M jS, Y');
-                                            echo $formattedDate; ?> </p>
-            </div>
-
-            <div class="flex space-x-4">
-                <select class="border border-gray-300 rounded-lg p-2" name="orderStatus" id="orderStatus">
-                    <option>Delivered</option>
-                    <option>Cancelled</option>
-                </select>
-                <button class="bg-blue-500 text-white px-4 py-2 rounded-lg" data-id="<?php echo $_GET['orderID'] ?>" id="saveBtn">Save</button>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-                <img class="h-12 w-12 mb-4" src="../images/user.svg" alt="Customer Icon">
-                <p class="font-semibold text-lg text-gray-700">Customer</p>
-                <p class="text-sm text-gray-600">Full Name: <?php echo $customerOder['customer_name'] ?></p>
-                <p class="text-sm text-gray-600">Email: <?php echo $customerOder['email'] ?></p>
-                <p class="text-sm text-gray-600">Phone: +23893843974</p>
-            </div>
-
-            <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-                <img class="h-12 w-12 mb-4" src="../images/package.svg" alt="Order Info Icon">
-                <p class="font-semibold text-lg text-gray-700">Order Info</p>
-                <p class="text-sm text-gray-600">Shipping: Express</p>
-                <p class="text-sm text-gray-600">Payment Method: PayPal</p>
-                <p class="text-sm text-gray-600">Status: <?php echo $customerOder['order_status'] ?></p>
-            </div>
-
-            <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-                <img class="h-12 w-12 mb-4" src="../images/location.svg" alt="Delivery To Icon">
-                <p class="font-semibold text-lg text-gray-700">Delivery To</p>
-                <p class="text-sm text-gray-600">Address: </p>
-            </div>
-        </div>
+<div class="flex flex-wrap gap-3 items-end mb-6">
+    <div>
+        <label for="orderStatus" class="block text-sm font-medium mb-1">Update status</label>
+        <select class="border border-slate-300 rounded-lg p-2" name="orderStatus" id="orderStatus">
+            <?php foreach ($statuses as $status): ?>
+                <option value="<?= $status ?>" <?= $customerOrder['order_status'] === $status ? 'selected' : '' ?>><?= $status ?></option>
+            <?php endforeach; ?>
+        </select>
     </div>
+    <button type="button" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700" data-id="<?= $orderId ?>" id="saveBtn">Save status</button>
+    <p id="statusMsg" class="text-sm text-emerald-600 hidden">Status updated.</p>
+</div>
 
-    <div class="bg-white p-6 rounded-lg shadow-md mt-6">
-        <h4 class="text-xl font-semibold text-gray-700 mb-4">Products</h4>
-        <table class="w-full text-left table-auto">
-            <thead>
-                <tr class="border-b">
-                    <th class="py-2 px-4 text-sm font-medium text-gray-700">Product Name</th>
-                    <th class="py-2 px-4 text-sm font-medium text-gray-700">Order ID</th>
-                    <th class="py-2 px-4 text-sm font-medium text-gray-700">Quantity</th>
-                    <th class="py-2 px-4 text-sm font-medium text-gray-700">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                foreach ($orderProducts as $orderProduct) {
-                    echo "<tr class='border-b'>
-                        <td class='py-2 px-4 text-sm text-gray-600'>{$orderProduct['product_name']}</td>
-                        <td class='py-2 px-4 text-sm text-gray-600'>#{$orderProduct['order_id']}</td>
-                        <td class='py-2 px-4 text-sm text-gray-600'>{$orderProduct['quantity']}</td>
-                        <td class='py-2 px-4 text-sm text-gray-600'>MWK{$orderProduct['totalPrice']}</td>
-                    </tr>";
-                }
-                ?>
-            </tbody>
-            <tfoot>
-                <tr class="border-t">
-                    <td colspan="3" class="py-2 px-4 text-sm font-semibold text-gray-700">Total</td>
-                    <td class="py-2 px-4 text-sm text-gray-700">$180</td>
-                </tr>
-            </tfoot>
-        </table>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+        <p class="font-semibold mb-2">Customer</p>
+        <p class="text-sm text-slate-600"><?= htmlspecialchars($customerOrder['customer_name']) ?></p>
+        <p class="text-sm text-slate-600"><?= htmlspecialchars($customerOrder['email']) ?></p>
+        <p class="text-sm text-slate-600"><?= htmlspecialchars($customerOrder['phone'] ?? '—') ?></p>
+    </div>
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+        <p class="font-semibold mb-2">Order info</p>
+        <p class="text-sm text-slate-600">Payment: <?= htmlspecialchars($customerOrder['payment_method'] ?? 'N/A') ?></p>
+        <p class="text-sm text-slate-600">Status: <?= htmlspecialchars($customerOrder['order_status']) ?></p>
+        <?php if (!empty($customerOrder['notes'])): ?>
+            <p class="text-sm text-slate-600 mt-2">Notes: <?= htmlspecialchars($customerOrder['notes']) ?></p>
+        <?php endif; ?>
+    </div>
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+        <p class="font-semibold mb-2">Delivery to</p>
+        <p class="text-sm text-slate-600"><?= nl2br(htmlspecialchars($customerOrder['shipping_address'] ?? '—')) ?></p>
     </div>
 </div>
 
+<div class="border border-slate-200 rounded-xl overflow-hidden">
+    <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+            <tr>
+                <th class="py-2 px-4 text-left">Product</th>
+                <th class="py-2 px-4 text-left">Qty</th>
+                <th class="py-2 px-4 text-left">Unit price</th>
+                <th class="py-2 px-4 text-left">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($orderProducts as $orderProduct): ?>
+                <tr class="border-t border-slate-100">
+                    <td class="py-2 px-4"><?= htmlspecialchars($orderProduct['product_name']) ?></td>
+                    <td class="py-2 px-4"><?= (int) $orderProduct['quantity'] ?></td>
+                    <td class="py-2 px-4"><?= htmlspecialchars(format_money($orderProduct['price'])) ?></td>
+                    <td class="py-2 px-4"><?= htmlspecialchars(format_money($orderProduct['totalPrice'])) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+        <tfoot>
+            <tr class="border-t bg-slate-50 font-semibold">
+                <td colspan="3" class="py-2 px-4 text-right">Order total</td>
+                <td class="py-2 px-4"><?= htmlspecialchars(format_money($customerOrder['amount'])) ?></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
 <script>
-    const orderStatus = document.querySelector("#orderStatus");
-    document.querySelector("#saveBtn").addEventListener('click', function() {
-
-        const formData = new FormData();
-        formData.append('orderStatus', orderStatus.value);
-
-        fetch(`order_details_handler.php?orderID=${this.dataset.id}`, {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                console.log(data);
-            })
-            .catch(error => {
-                console.log("error");
-            });
-    })
+document.querySelector('#saveBtn').addEventListener('click', function () {
+    const formData = new FormData();
+    formData.append('orderStatus', document.querySelector('#orderStatus').value);
+    fetch(`order_details_handler.php?orderID=${this.dataset.id}`, { method: 'POST', body: formData })
+        .then(r => r.text())
+        .then(() => {
+            const msg = document.querySelector('#statusMsg');
+            msg.classList.remove('hidden');
+            setTimeout(() => location.reload(), 600);
+        })
+        .catch(() => alert('Failed to update status'));
+});
 </script>

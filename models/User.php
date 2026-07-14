@@ -10,17 +10,18 @@ class User extends Database
         parent::__construct();
     }
 
-    // Create User
-    public function addUser($first_name, $last_name, $email, $passwd)
+    public function addUser($first_name, $last_name, $email, $passwd, $phone = null, $address = null)
     {
-        $query = "INSERT INTO `{$this->usersTable}` (first_name, last_name, email, passwd)
-                  VALUES (:first_name, :last_name, :email, :passwd)";
+        $query = "INSERT INTO `{$this->usersTable}` (first_name, last_name, email, passwd, phone, address)
+                  VALUES (:first_name, :last_name, :email, :passwd, :phone, :address)";
         $hashPasswd = password_hash($passwd, PASSWORD_DEFAULT);
         $params = [
             'first_name' => $first_name,
             'last_name'  => $last_name,
             'email'      => $email,
-            'passwd'     => $hashPasswd
+            'passwd'     => $hashPasswd,
+            'phone'      => $phone ?: null,
+            'address'    => $address ?: null,
         ];
         $this->executeQuery($query, $params);
         return $this->conn->lastInsertId();

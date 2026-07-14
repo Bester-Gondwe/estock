@@ -1,6 +1,6 @@
 <div class="products__topbar sub-header flex justify-between items-center mb-4">
     <h4 class="text-xl font-semibold">Products</h4>
-    <button class="btn bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" id="addProductBtn">Add Product</button>
+    <button type="button" class="btn bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700" id="addProductBtn">Add Product</button>
 </div>
 
 <div class="product-cards grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="product-cards">
@@ -42,12 +42,23 @@
                                 <div class="flex space-x-4">
                                     <div class="input-box w-1/2">
                                         <label class="input-box__label block text-sm font-medium text-gray-700" for="stockQuantity">Stock Quantity</label>
-                                        <input class="input-box__field p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" type="number" name="stockQuantity" id="stockQuantity">
+                                        <input class="input-box__field p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500" type="number" name="stockQuantity" id="stockQuantity" min="0">
                                     </div>
 
                                     <div class="input-box w-1/2">
-                                        <label class="input-box__label block text-sm font-medium text-gray-700" for="productPrice">Price</label>
-                                        <input class="input-box__field p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" type="number" name="productPrice" id="productPrice">
+                                        <label class="input-box__label block text-sm font-medium text-gray-700" for="productPrice">Price (MWK)</label>
+                                        <input class="input-box__field p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500" type="number" step="0.01" name="productPrice" id="productPrice" min="0">
+                                    </div>
+                                </div>
+
+                                <div class="flex space-x-4">
+                                    <div class="input-box w-1/2">
+                                        <label class="input-box__label block text-sm font-medium text-gray-700" for="sku">SKU (optional)</label>
+                                        <input class="input-box__field p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500" type="text" name="sku" id="sku">
+                                    </div>
+                                    <div class="input-box w-1/2">
+                                        <label class="input-box__label block text-sm font-medium text-gray-700" for="lowStockThreshold">Low stock alert</label>
+                                        <input class="input-box__field p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500" type="number" name="lowStockThreshold" id="lowStockThreshold" value="5" min="0">
                                     </div>
                                 </div>
                             </div>

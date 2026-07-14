@@ -1,32 +1,25 @@
--- eStock database schema
--- Compatible with MySQL 5.7+ / MariaDB 10.3+
--- Import via: mysql -u root estock < sql/estock_file.sql
--- Or create DB first: CREATE DATABASE estock CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
+-- Migration: create eStock core schema
+SET NAMES utf8mb4;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
 SET time_zone = "+00:00";
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+CREATE TABLE IF NOT EXISTS `migrations` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) NOT NULL,
+  `batch` int NOT NULL,
+  `executed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `migrations_migration_unique` (`migration`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE DATABASE IF NOT EXISTS `estock` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `estock`;
-
--- --------------------------------------------------------
-
-CREATE TABLE `categories` (
+CREATE TABLE IF NOT EXISTS `categories` (
   `category_id` int(11) NOT NULL AUTO_INCREMENT,
   `category_name` varchar(100) NOT NULL,
   PRIMARY KEY (`category_id`),
   UNIQUE KEY `category_name` (`category_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(40) NOT NULL,
   `last_name` varchar(40) NOT NULL,
@@ -39,21 +32,17 @@ CREATE TABLE `users` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
-CREATE TABLE `roles` (
+CREATE TABLE IF NOT EXISTS `roles` (
   `role_id` int(11) NOT NULL AUTO_INCREMENT,
   `role_name` varchar(16) NOT NULL,
   PRIMARY KEY (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `roles` (`role_id`, `role_name`) VALUES
+INSERT IGNORE INTO `roles` (`role_id`, `role_name`) VALUES
 (1, 'Customer'),
 (2, 'Merchant');
 
--- --------------------------------------------------------
-
-CREATE TABLE `user_roles` (
+CREATE TABLE IF NOT EXISTS `user_roles` (
   `user_id` int(11) NOT NULL,
   `role_id` int(11) NOT NULL,
   KEY `role_id` (`role_id`),
@@ -62,9 +51,7 @@ CREATE TABLE `user_roles` (
   CONSTRAINT `user_roles_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
-CREATE TABLE `products` (
+CREATE TABLE IF NOT EXISTS `products` (
   `product_id` int(11) NOT NULL AUTO_INCREMENT,
   `product_name` varchar(150) NOT NULL,
   `product_description` text NOT NULL,
@@ -84,9 +71,7 @@ CREATE TABLE `products` (
   CONSTRAINT `products_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
-CREATE TABLE `product_images` (
+CREATE TABLE IF NOT EXISTS `product_images` (
   `image_id` int(11) NOT NULL AUTO_INCREMENT,
   `file_name` varchar(255) NOT NULL,
   `is_primary` tinyint(1) NOT NULL DEFAULT 0,
@@ -96,9 +81,7 @@ CREATE TABLE `product_images` (
   CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
-CREATE TABLE `orders` (
+CREATE TABLE IF NOT EXISTS `orders` (
   `order_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `order_date` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -112,9 +95,7 @@ CREATE TABLE `orders` (
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
-CREATE TABLE `order_details` (
+CREATE TABLE IF NOT EXISTS `order_details` (
   `order_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
@@ -125,9 +106,7 @@ CREATE TABLE `order_details` (
   CONSTRAINT `order_details_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
-CREATE TABLE `inventory_movements` (
+CREATE TABLE IF NOT EXISTS `inventory_movements` (
   `movement_id` int(11) NOT NULL AUTO_INCREMENT,
   `product_id` int(11) NOT NULL,
   `change_qty` int(11) NOT NULL,
@@ -138,31 +117,3 @@ CREATE TABLE `inventory_movements` (
   KEY `product_id` (`product_id`),
   CONSTRAINT `inventory_movements_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Demo seed data (password for both: password123)
-INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `email`, `passwd`, `phone`, `address`) VALUES
-(1, 'Demo', 'Customer', 'customer@estock.test', '$2y$10$twFrP9oyiMSyH64LPZ0iResmx4rYRfN9FXxfJ.tLhUtg2LmBuzR3y', '+265999000001', 'Lilongwe, Malawi'),
-(2, 'Demo', 'Merchant', 'merchant@estock.test', '$2y$10$twFrP9oyiMSyH64LPZ0iResmx4rYRfN9FXxfJ.tLhUtg2LmBuzR3y', '+265999000002', 'Blantyre, Malawi');
-
-INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
-(1, 1),
-(2, 2);
-
-INSERT INTO `categories` (`category_id`, `category_name`) VALUES
-(1, 'Electronics'),
-(2, 'Fashion'),
-(3, 'Home & Living'),
-(4, 'Groceries');
-
-INSERT INTO `products` (`product_id`, `product_name`, `product_description`, `product_price`, `category_id`, `quantity`, `sku`, `low_stock_threshold`, `user_id`) VALUES
-(1, 'Wireless Bluetooth Headphones', 'Comfortable over-ear headphones with noise cancellation and 30-hour battery life.', 45000.00, 1, 25, 'EL-HEAD-001', 5, 2),
-(2, 'Smart LED Desk Lamp', 'Adjustable brightness LED lamp with USB charging port.', 18500.00, 1, 40, 'EL-LAMP-002', 5, 2),
-(3, 'Classic Cotton T-Shirt', 'Soft 100% cotton unisex t-shirt available in multiple sizes.', 8500.00, 2, 60, 'FA-TSHIRT-003', 10, 2),
-(4, 'Ceramic Coffee Mug Set', 'Set of 4 durable ceramic mugs — dishwasher safe.', 12000.00, 3, 30, 'HL-MUG-004', 5, 2),
-(5, 'Organic Honey 500g', 'Pure organic honey sourced from local farms.', 6500.00, 4, 50, 'GR-HONEY-005', 8, 2);
-
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

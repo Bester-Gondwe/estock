@@ -1,19 +1,24 @@
 <?php
-session_start();
-require_once 'models/User.php';
+require_once __DIR__ . '/config/bootstrap.php';
+require_once __DIR__ . '/models/User.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user = new User();
+header('Content-Type: application/json');
 
-    // Check if the email exists
-    if (isset($_POST['email'])) {
-        $email = htmlentities($_POST['email']); // Sanitize email input
-        if ($user->emailExists($email)) {
-            // Return a message if email exists
-            echo json_encode(['error' => 'Email already exists']);
-        } else {
-            // Return a success message if email does not exist
-            echo json_encode(['success' => 'Email is available']);
-        }
-    }
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
+
+$email = trim($_POST['email'] ?? '');
+if ($email === '') {
+    echo json_encode(['error' => 'Email is required']);
+    exit;
+}
+
+$user = new User();
+if ($user->emailExists($email)) {
+    echo json_encode(['error' => 'Email already exists']);
+} else {
+    echo json_encode(['success' => 'Email is available']);
 }

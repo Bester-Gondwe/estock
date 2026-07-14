@@ -30,7 +30,8 @@ function loadProducts() {
 }
 
 function closeModal() {
-    modal.classList.remove("open");
+    modal.classList.remove('open', 'show', 'flex');
+    modal.classList.add('hidden');
     resetForm();
     loadProducts();
 }
@@ -72,10 +73,12 @@ document.querySelector("#updateBtn").addEventListener("click", e => {
     formData.append("productPrice", productForm.productPrice.value);
     formData.append("stockQuantity", productForm.stockQuantity.value);
     formData.append("categoryName", productForm.categoryName.value);
+    if (productForm.sku) formData.append("sku", productForm.sku.value);
+    if (productForm.lowStockThreshold) formData.append("lowStockThreshold", productForm.lowStockThreshold.value);
     formData.append("primaryImg", primaryImage);
 
-    newImages.forEach((file, index) => {
-        formData.append(`productImages[${index}]`, file);
+    newImages.forEach((file) => {
+        formData.append('productImages[]', file);
     });
 
     const removedImageIDs = existingImages
@@ -102,7 +105,8 @@ document.querySelector("#updateBtn").addEventListener("click", e => {
 
 // Add Product button
 document.querySelector("#addProductBtn").addEventListener("click", () => {
-    modal.classList.add("open");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
 });
 
 // Delete product
@@ -118,30 +122,33 @@ function deleteProduct(productId) {
 
 // Render product card
 function renderProductCard(product) {
-    const image = product.primary_image ? `../uploads/${product.primary_image}` : "../images/landscape-placeholder-svgrepo-com.svg";
+    const image = product.primary_image
+        ? `../uploads/${product.primary_image}`
+        : "../images/landscape-placeholder-svgrepo-com.svg";
+    const stockClass = Number(product.quantity) <= Number(product.low_stock_threshold || 5)
+        ? 'text-amber-600'
+        : 'text-slate-500';
     return `
-        <div class="product-card">
-            <div class="product-card__container">
-                <div class="product-image">
-                    <img src="${image}" alt="Product Image">
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+            <img src="${image}" alt="" class="w-full h-40 object-cover bg-slate-100" onerror="this.src='../assets/default-image.svg'">
+            <div class="p-4 space-y-2">
+                <p class="text-xs text-slate-400">${product.category_name || ''}</p>
+                <p class="font-semibold truncate">${product.product_name}</p>
+                <p class="text-emerald-700 font-medium">MWK ${Number(product.product_price).toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                <p class="text-xs ${stockClass}">Stock: ${product.quantity ?? 0}${product.sku ? ' · SKU ' + product.sku : ''}</p>
+                <p class="text-sm text-slate-500 line-clamp-2">${product.product_description || ''}</p>
+                <div class="flex gap-2 pt-2">
+                    <button type="button" class="flex-1 bg-emerald-600 text-white text-sm py-1.5 rounded-lg hover:bg-emerald-700" onclick="editProduct(${product.product_id})">Edit</button>
+                    <button type="button" class="flex-1 bg-red-500 text-white text-sm py-1.5 rounded-lg hover:bg-red-600" onclick="deleteProduct(${product.product_id})">Delete</button>
                 </div>
-                <div class="product-info">
-                    <p class="product-name">${product.category_name}</p>
-                    <p class="product-name">${product.product_name}</p>
-                    <p class="product-price">$${product.product_price}</p>
-                </div>
-            </div>
-            <p>${product.product_description}</p>
-            <div class="product-actions">
-                <button class="btn edit-btn" onclick="editProduct(${product.product_id})">Edit</button>
-                <button class="btn delete-btn" onclick="deleteProduct(${product.product_id})">Delete</button>
             </div>
         </div>`;
 }
 
 // Edit product
 function editProduct(productId) {
-    modal.classList.add("open");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
     fetch(`product_handler.php?id=${productId}`)
         .then(res => res.json())
         .then(data => {
@@ -151,6 +158,8 @@ function editProduct(productId) {
             productForm.productPrice.value = data.product_price;
             productForm.stockQuantity.value = data.quantity;
             productForm.categoryName.value = data.category_name;
+            if (productForm.sku) productForm.sku.value = data.sku || '';
+            if (productForm.lowStockThreshold) productForm.lowStockThreshold.value = data.low_stock_threshold || 5;
 
             existingImages = data.images || [];
             productImagesCount = existingImages.length;

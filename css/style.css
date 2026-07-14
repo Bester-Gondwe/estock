@@ -1,0 +1,34 @@
+/* eStock shared styles — complements Tailwind CDN */
+
+:root {
+  --estock-primary: #047857;
+  --estock-primary-dark: #065f46;
+  --estock-accent: #0d9488;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+.toast {
+  animation: slideIn 0.4s ease, fadeOut 0.4s ease 2.6s forwards;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; }
+}
+
+/* Merchant product modal */
+#productModal.open,
+#productModal.show {
+  display: flex !important;
+}
+
+#categoryModal.show {
+  display: flex !important;
+}
