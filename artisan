@@ -1,0 +1,208 @@
+#!/usr/bin/env php
+<?php
+/**
+ * eStock CLI (Laravel-style artisan commands for this plain PHP app)
+ *
+ * Usage:
+ *   php artisan key:generate
+ *   php artisan migrate
+ *   php artisan migrate:fresh
+ *   php artisan migrate:fresh --seed
+ *   php artisan db:seed
+ *   php artisan list
+ */
+
+declare(strict_types=1);
+
+if (PHP_SAPI !== 'cli') {
+    fwrite(STDERR, "This command must be run from the CLI.\n");
+    exit(1);
+}
+
+$root = __DIR__;
+require_once $root . '/vendor/autoload.php';
+
+if (is_readable($root . '/.env')) {
+    Dotenv\Dotenv::createImmutable($root)->safeLoad();
+}
+
+$command = $argv[1] ?? 'list';
+$flags = array_slice($argv, 2);
+
+try {
+    match ($command) {
+        'migrate' => migrate($root, false, in_array('--seed', $flags, true)),
+        'migrate:fresh' => migrate($root, true, in_array('--seed', $flags, true)),
+        'db:seed' => seed($root),
+        'list', 'help', '--help', '-h' => showHelp(),
+        default => throw new RuntimeException("Unknown command: {$command}\nRun `php artisan list` for available commands."),
+    };
+} catch (Throwable $e) {
+    fwrite(STDERR, 'ERROR: ' . $e->getMessage() . PHP_EOL);
+    exit(1);
+}
+
+exit(0);
+
+function envVal(string $key, mixed $default = null): mixed
+{
+    $value = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
+    if ($value === false || $value === null || $value === '') {
+        return $default;
+    }
+    return $value;
+}
+
+function pdo(bool $withDatabase = true): PDO
+{
+    $host = (string) envVal('DB_HOST', 'localhost');
+    $port = (string) envVal('DB_PORT', '3306');
+    $db = (string) envVal('DB_NAME', 'estock');
+    $user = (string) envVal('DB_USER', 'root');
+    $pass = (string) envVal('DB_PASS', '');
+    $pass = $pass === '' ? null : $pass;
+
+    $dsn = $withDatabase
+        ? "mysql:host={$host};port={$port};dbname={$db};charset=utf8mb4"
+        : "mysql:host={$host};port={$port};charset=utf8mb4";
+
+    $pdo = new PDO($dsn, $user, $pass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ]);
+
+    return $pdo;
+}
+
+function ensureDatabase(): void
+{
+    $db = (string) envVal('DB_NAME', 'estock');
+    $pdo = pdo(false);
+    $pdo->exec("CREATE DATABASE IF NOT EXISTS `{$db}` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+    writeln("<info>Database ready:</info> {$db}");
+}
+
+function ensureMigrationsTable(PDO $pdo): void
+{
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `migrations` (
+        `id` int unsigned NOT NULL AUTO_INCREMENT,
+        `migration` varchar(255) NOT NULL,
+        `batch` int NOT NULL,
+        `executed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`),
+        UNIQUE KEY `migrations_migration_unique` (`migration`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
+}
+
+function runSqlFile(PDO $pdo, string $path): void
+{
+    $sql = file_get_contents($path);
+    if ($sql === false) {
+        throw new RuntimeException("Unable to read SQL file: {$path}");
+    }
+
+    $sql = preg_replace('/\/\*!.*?\*\//s', '', $sql) ?? $sql;
+    $sql = preg_replace('/^\s*--.*$/m', '', $sql) ?? $sql;
+
+    $statements = array_filter(array_map('trim', explode(';', $sql)));
+    foreach ($statements as $statement) {
+        if ($statement === '') {
+            continue;
+        }
+        $pdo->exec($statement);
+    }
+}
+
+function migrate(string $root, bool $fresh = false, bool $withSeed = false): void
+{
+    ensureDatabase();
+    $pdo = pdo(true);
+
+    if ($fresh) {
+        $db = (string) envVal('DB_NAME', 'estock');
+        writeln('<comment>Dropping all tables...</comment>');
+        $pdo->exec('SET FOREIGN_KEY_CHECKS=0');
+        $tables = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
+        foreach ($tables as $table) {
+            $pdo->exec("DROP TABLE IF EXISTS `{$table}`");
+        }
+        $pdo->exec('SET FOREIGN_KEY_CHECKS=1');
+        writeln("<info>Dropped database tables in</info> {$db}");
+    }
+
+    ensureMigrationsTable($pdo);
+
+    $dir = $root . '/database/migrations';
+    if (!is_dir($dir)) {
+        throw new RuntimeException('Missing database/migrations directory.');
+    }
+
+    $files = glob($dir . '/*.sql') ?: [];
+    sort($files);
+
+    $ran = $pdo->query('SELECT migration FROM migrations')->fetchAll(PDO::FETCH_COLUMN);
+    $batch = (int) $pdo->query('SELECT COALESCE(MAX(batch), 0) FROM migrations')->fetchColumn() + 1;
+    $count = 0;
+
+    foreach ($files as $file) {
+        $name = basename($file, '.sql');
+        if (in_array($name, $ran, true)) {
+            continue;
+        }
+
+        writeln("<info>Migrating:</info> {$name}");
+        runSqlFile($pdo, $file);
+        $stmt = $pdo->prepare('INSERT INTO migrations (migration, batch) VALUES (?, ?)');
+        $stmt->execute([$name, $batch]);
+        $count++;
+    }
+
+    if ($count === 0) {
+        writeln('<comment>Nothing to migrate.</comment>');
+    } else {
+        writeln("<info>Migrated:</info> {$count} migration(s)");
+    }
+
+    if ($withSeed) {
+        seed($root);
+    }
+}
+
+function seed(string $root): void
+{
+    $pdo = pdo(true);
+    $file = $root . '/database/seeders/demo_seeder.sql';
+
+    if (!is_readable($file)) {
+        throw new RuntimeException('Missing database/seeders/demo_seeder.sql');
+    }
+
+    writeln('<info>Seeding:</info> DemoSeeder');
+    runSqlFile($pdo, $file);
+    writeln('<info>Database seeding completed successfully.</info>');
+    writeln('Demo logins (password: password123)');
+    writeln('  customer@estock.test');
+    writeln('  merchant@estock.test');
+}
+
+function showHelp(): void
+{
+    writeln('eStock Artisan');
+    writeln('');
+    writeln('Available commands:');
+    writeln('  php artisan migrate              Run pending migrations');
+    writeln('  php artisan migrate:fresh         Drop all tables and re-run migrations');
+    writeln('  php artisan migrate:fresh --seed  Fresh migrate + seed demo data');
+    writeln('  php artisan db:seed               Seed the database');
+    writeln('  php artisan list                  Show this help');
+}
+
+function writeln(string $message): void
+{
+    $message = str_replace(
+        ['<info>', '</info>', '<comment>', '</comment>'],
+        ["\033[32m", "\033[0m", "\033[33m", "\033[0m"],
+        $message
+    );
+    echo $message . PHP_EOL;
+}

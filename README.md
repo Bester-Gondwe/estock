@@ -40,26 +40,23 @@ APP_CURRENCY=MWK
 APP_DEBUG=true
 ```
 
-6. Create the database and import the schema (pick one method).
-
-### Option A — MySQL CLI
+6. Create / migrate the database:
 
 ```bash
-mysql -u root -e "CREATE DATABASE IF NOT EXISTS estock CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
-mysql -u root estock < sql/estock_file.sql
+php artisan migrate:fresh --seed
 ```
 
-### Option B — phpMyAdmin (Laragon)
-
-1. Open http://localhost/phpmyadmin
-2. Import `sql/estock_file.sql` (it creates the `estock` database if missing)
-
-### Option C — Existing database upgrade
-
-If you already have an older eStock database:
+Other options:
 
 ```bash
-mysql -u root estock < sql/upgrade.sql
+php artisan migrate
+php artisan db:seed
+```
+
+Or import the SQL dump manually:
+
+```bash
+mysql -u root < sql/estock_file.sql
 ```
 
 7. Ensure the uploads folder is writable:
@@ -81,7 +78,7 @@ chmod -R 775 uploads
 
 ## Demo accounts
 
-After importing `sql/estock_file.sql`:
+After `php artisan db:seed` or `migrate:fresh --seed`:
 
 | Role     | Email                 | Password    |
 |----------|-----------------------|-------------|
@@ -92,22 +89,20 @@ After importing `sql/estock_file.sql`:
 
 ```
 estock/
+├── artisan                  # CLI: migrate, seed, etc.
+├── database/
+│   ├── migrations/          # SQL migrations
+│   └── seeders/             # Demo seed data
 ├── config/bootstrap.php     # Env loader, session, helpers
 ├── connection.php           # PDO database class
 ├── models/                  # User, Product, Order, Category, ProductImage
 ├── merchant/                # Merchant dashboard
-├── sql/                     # Schema + upgrade scripts
+├── sql/                     # Legacy dump + upgrade scripts
 ├── uploads/                 # Product images (not committed)
-├── css/                     # Shared styles
-├── assets/                  # Fallback images
-├── js/                      # Storefront scripts
-├── .env.example             # Environment template
-├── index.php                # Storefront home
-├── category.php             # Catalog + search
-├── product.php              # Product detail
-├── cart.php / checkout.php  # Cart & checkout
-├── my_orders.php            # Customer order history
-└── process_order.php        # Order placement + stock deduction
+├── vendor/                  # Composer dependencies
+├── .env.example
+├── composer.json
+└── index.php
 ```
 
 ## Features
@@ -147,6 +142,11 @@ composer update
 
 # Regenerate autoload after adding model classes
 composer dump-autoload
+
+# Database
+php artisan migrate
+php artisan migrate:fresh --seed
+php artisan db:seed
 
 # Copy env file
 copy .env.example .env
