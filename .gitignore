@@ -5,7 +5,8 @@ uploads/*
 .DS_Store
 Thumbs.db
 *.log
-vendor/
+/vendor/
+composer.lock
 node_modules/
 .idea/
 .vscode/

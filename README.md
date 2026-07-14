@@ -5,6 +5,7 @@ Professional online stock marketplace built with PHP and MySQL. Customers browse
 ## Requirements
 
 - PHP 8.0+ (Laragon recommended on Windows)
+- Composer 2.x
 - MySQL 5.7+ or MariaDB 10.3+
 - Apache with `mod_rewrite` optional (plain PHP file routing)
 - PDO MySQL extension enabled
@@ -13,13 +14,19 @@ Professional online stock marketplace built with PHP and MySQL. Customers browse
 
 1. Place the project in your web root, e.g. `C:\laragon\www\estock`
 2. Start **Apache** and **MySQL** from Laragon
-3. Copy environment config:
+3. Install PHP dependencies:
+
+```bash
+composer install
+```
+
+4. Copy environment config (also done automatically after `composer install` if `.env` is missing):
 
 ```bash
 copy .env.example .env
 ```
 
-4. Edit `.env` if needed (defaults work with Laragon's root user and empty password):
+5. Edit `.env` if needed (defaults work with Laragon's root user and empty password):
 
 ```env
 DB_HOST=localhost
@@ -33,7 +40,7 @@ APP_CURRENCY=MWK
 APP_DEBUG=true
 ```
 
-5. Create the database and import the schema (pick one method).
+6. Create the database and import the schema (pick one method).
 
 ### Option A — MySQL CLI
 
@@ -55,7 +62,7 @@ If you already have an older eStock database:
 mysql -u root estock < sql/upgrade.sql
 ```
 
-6. Ensure the uploads folder is writable:
+7. Ensure the uploads folder is writable:
 
 ```bash
 mkdir uploads
@@ -67,7 +74,7 @@ On Linux/macOS:
 chmod -R 775 uploads
 ```
 
-7. Open the app:
+8. Open the app:
 
 - Virtual host: http://estock.test  
 - Or: http://localhost/estock/
@@ -132,6 +139,15 @@ estock/
 ## Common commands
 
 ```bash
+# Install PHP dependencies
+composer install
+
+# Update dependencies
+composer update
+
+# Regenerate autoload after adding model classes
+composer dump-autoload
+
 # Copy env file
 copy .env.example .env
 
