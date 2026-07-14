@@ -30,7 +30,7 @@ function loadProducts() {
 }
 
 function closeModal() {
-    modal.classList.remove('open', 'show');
+    modal.classList.remove('open', 'show', 'flex');
     modal.classList.add('hidden');
     resetForm();
     loadProducts();
