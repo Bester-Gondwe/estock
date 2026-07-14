@@ -1,77 +1,78 @@
 <?php
-session_start();
+require_once __DIR__ . '/../config/bootstrap.php';
+require_merchant();
 
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
-    }
-    header("Location: ../login.php");
-    exit;
-}
-// Determine the current page based on the 'p' query parameter
 $page = isset($_GET['p']) ? basename($_GET['p']) : 'home';
+$allowed = ['home', 'products', 'orders', 'order_details'];
+if (!in_array($page, $allowed, true)) {
+    $page = 'home';
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-<?php include 'header.php'; ?>
-<script src="https://cdn.tailwindcss.com"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merchant Dashboard — eStock</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans">
 
-<body class="bg-gray-100 text-gray-800 font-sans">
-
-    <div class="flex h-screen">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white shadow-md flex flex-col">
+    <div class="flex min-h-screen">
+        <aside class="w-64 bg-white shadow-sm border-r border-slate-200 flex flex-col shrink-0">
             <div class="p-4 border-b flex items-center justify-between">
-                <a href="#" class="flex items-center space-x-2">
-                    <p class="text-xl font-semibold text-blue-600">eStock</p>
-                    <img class="w-8 h-8" src="../images/shop-bag-with-handle-svgrepo-com.svg" alt="eStock Logo">
+                <a href="./index.php?p=home" class="flex items-center space-x-2">
+                    <p class="text-xl font-semibold text-emerald-700">eStock</p>
+                    <img class="w-8 h-8" src="../images/shop-bag-with-handle-svgrepo-com.svg" alt="eStock">
                 </a>
             </div>
 
             <nav class="flex-1 overflow-y-auto mt-4">
-                <ul class="space-y-2 px-4">
-                    <li class="<?= $page === 'home' ? 'bg-blue-50 rounded-lg' : '' ?>">
-                        <a href="./index.php?p=home" class="flex items-center space-x-2 px-3 py-2 hover:bg-blue-100 rounded-lg">
-                            <img class="w-5 h-5" src="../images/dashboard-svgrepo-com.svg" alt="Dashboard Icon">
-                            <span class="text-sm">Dashboard</span>
+                <ul class="space-y-1 px-3">
+                    <li>
+                        <a href="./index.php?p=home" class="flex items-center space-x-2 px-3 py-2 rounded-lg text-sm <?= $page === 'home' ? 'bg-emerald-50 text-emerald-800 font-medium' : 'hover:bg-slate-50' ?>">
+                            <img class="w-5 h-5" src="../images/dashboard-svgrepo-com.svg" alt="">
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./index.php?p=products" class="flex items-center space-x-2 px-3 py-2 rounded-lg text-sm <?= $page === 'products' ? 'bg-emerald-50 text-emerald-800 font-medium' : 'hover:bg-slate-50' ?>">
+                            <img class="w-5 h-5" src="../images/album-collection-svgrepo-com.svg" alt="">
+                            <span>Products</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./index.php?p=orders" class="flex items-center space-x-2 px-3 py-2 rounded-lg text-sm <?= $page === 'orders' ? 'bg-emerald-50 text-emerald-800 font-medium' : 'hover:bg-slate-50' ?>">
+                            <img class="w-5 h-5" src="../images/online-delivery-svgrepo-com.svg" alt="">
+                            <span>Orders</span>
                         </a>
                     </li>
 
-                    <li class="<?= $page === 'products' ? 'bg-blue-50 rounded-lg' : '' ?>">
-                        <a href="./index.php?p=products" class="flex items-center space-x-2 px-3 py-2 hover:bg-blue-100 rounded-lg">
-                            <img class="w-5 h-5" src="../images/album-collection-svgrepo-com.svg" alt="Products Icon">
-                            <span class="text-sm">Products</span>
-                        </a>
+                    <li class="pt-4 px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Categories</li>
+                    <li>
+                        <div id="categoriesMenu" class="flex items-center justify-between cursor-pointer px-3 py-2 text-sm hover:bg-slate-50 rounded-lg">
+                            <p>Manage categories</p>
+                            <img class="w-4 h-4" src="../images/ic_down-arrow.svg" alt="">
+                        </div>
+                        <div id="categoriesWrapper" class="hidden">
+                            <ul id="categoriesList" class="text-sm pl-4 space-y-1 mt-1"></ul>
+                            <p id="newCategoryBtn" class="text-emerald-600 mt-2 pl-4 cursor-pointer hover:underline text-sm">+ New category</p>
+                        </div>
                     </li>
-
-                    <li class="<?= $page === 'orders' ? 'bg-blue-50 rounded-lg' : '' ?>">
-                        <a href="./index.php?p=orders" class="flex items-center space-x-2 px-3 py-2 hover:bg-blue-100 rounded-lg">
-                            <img class="w-5 h-5" src="../images/online-delivery-svgrepo-com.svg" alt="Orders Icon">
-                            <span class="text-sm">Orders</span>
-                        </a>
-                    </li>
-
-                    <div class="pt-4 font-semibold text-sm text-gray-600">Categories</div>
-                    <div id="categoriesMenu" class="flex items-center justify-between cursor-pointer px-3 py-2 text-sm hover:bg-gray-100 rounded-lg">
-                        <p>Categories</p>
-                        <img class="w-4 h-4" src="../images/ic_down-arrow.svg" alt="Toggle">
-                    </div>
-
-                    <div id="categoriesWrapper" class="hidden">
-                        <ul id="categoriesList" class="text-sm pl-4 space-y-2 mt-2"></ul>
-                        <p id="newCategoryBtn" class="text-blue-500 mt-3 pl-4 cursor-pointer hover:underline">+ New Category</p>
-                    </div>
                 </ul>
             </nav>
+
+            <div class="p-4 border-t text-sm">
+                <a href="../" class="text-slate-500 hover:text-emerald-700">← Back to store</a>
+            </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="flex-1 p-6 overflow-y-auto">
-            <?php include_once "../topbar.php"; ?>
-            <div class="bg-white shadow-md rounded-lg p-6">
+            <?php include_once '../topbar.php'; ?>
+            <div class="bg-white shadow-sm border border-slate-200 rounded-xl p-6 mt-4">
                 <?php
-                if (!file_exists($page . ".php")) {
+                if (!file_exists(__DIR__ . '/' . $page . '.php')) {
                     include '../404.html';
                 } else {
                     include $page . '.php';
@@ -81,25 +82,22 @@ $page = isset($_GET['p']) ? basename($_GET['p']) : 'home';
         </main>
     </div>
 
-    <!-- Category Modal -->
-    <div id="categoryModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+    <div id="categoryModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 mx-4">
             <div class="flex justify-between items-center border-b pb-2 mb-4">
-                <h2 class="text-lg font-semibold">Manage Category</h2>
-                <button id="close-btn" class="text-gray-500 hover:text-red-500 text-2xl">&times;</button>
+                <h2 class="text-lg font-semibold">Manage category</h2>
+                <button type="button" id="close-btn" class="text-slate-500 hover:text-red-500 text-2xl leading-none">&times;</button>
             </div>
-
             <form id="categoryForm" method="POST">
                 <input type="hidden" name="categoryId" id="categoryId">
                 <div class="mb-4">
-                    <label for="categoryName" class="block text-sm font-medium text-gray-700 mb-1">Category Name</label>
-                    <input type="text" name="categoryName" id="categoryName" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label for="categoryName" class="block text-sm font-medium text-slate-700 mb-1">Category name</label>
+                    <input type="text" name="categoryName" id="categoryName" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
             </form>
-
             <div class="flex justify-between mt-6">
-                <button id="categoryDeleteBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">DELETE</button>
-                <button id="categoryUpdateBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">SAVE</button>
+                <button type="button" id="categoryDeleteBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">Delete</button>
+                <button type="button" id="categoryUpdateBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg">Save</button>
             </div>
         </div>
     </div>
