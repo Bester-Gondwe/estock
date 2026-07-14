@@ -3,7 +3,7 @@ require_once __DIR__ . '/../config/bootstrap.php';
 require_merchant();
 
 $page = isset($_GET['p']) ? basename($_GET['p']) : 'home';
-$allowed = ['home', 'products', 'orders', 'order_details'];
+$allowed = ['home', 'products', 'orders', 'order_details', 'categories'];
 if (!in_array($page, $allowed, true)) {
     $page = 'home';
 }
@@ -48,16 +48,22 @@ if (!in_array($page, $allowed, true)) {
                             <span>Orders</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="./index.php?p=categories" class="flex items-center space-x-2 px-3 py-2 rounded-lg text-sm <?= $page === 'categories' ? 'bg-emerald-50 text-emerald-800 font-medium' : 'hover:bg-slate-50' ?>">
+                            <img class="w-5 h-5" src="../images/album-collection-svgrepo-com.svg" alt="">
+                            <span>Categories</span>
+                        </a>
+                    </li>
 
-                    <li class="pt-4 px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Categories</li>
+                    <li class="pt-4 px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Quick categories</li>
                     <li>
                         <div id="categoriesMenu" class="flex items-center justify-between cursor-pointer px-3 py-2 text-sm hover:bg-slate-50 rounded-lg">
-                            <p>Manage categories</p>
-                            <img class="w-4 h-4" src="../images/ic_down-arrow.svg" alt="">
+                            <p>Browse list</p>
+                            <img class="w-4 h-4 transition-transform" id="categoriesArrow" src="../images/ic_down-arrow.svg" alt="">
                         </div>
-                        <div id="categoriesWrapper" class="hidden">
-                            <ul id="categoriesList" class="text-sm pl-4 space-y-1 mt-1"></ul>
-                            <p id="newCategoryBtn" class="text-emerald-600 mt-2 pl-4 cursor-pointer hover:underline text-sm">+ New category</p>
+                        <div id="categoriesWrapper" class="hidden pl-2">
+                            <ul id="categoriesList" class="text-sm space-y-1 mt-1 max-h-48 overflow-y-auto"></ul>
+                            <p id="newCategoryBtn" class="text-emerald-600 mt-2 px-3 cursor-pointer hover:underline text-sm">+ New category</p>
                         </div>
                     </li>
                 </ul>
@@ -82,22 +88,25 @@ if (!in_array($page, $allowed, true)) {
         </main>
     </div>
 
-    <div id="categoryModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center">
-        <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 mx-4">
+    <div id="categoryModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
             <div class="flex justify-between items-center border-b pb-2 mb-4">
-                <h2 class="text-lg font-semibold">Manage category</h2>
-                <button type="button" id="close-btn" class="text-slate-500 hover:text-red-500 text-2xl leading-none">&times;</button>
+                <h2 class="text-lg font-semibold" id="categoryModalTitle">Manage category</h2>
+                <button type="button" id="categoryCloseBtn" class="text-slate-500 hover:text-red-500 text-2xl leading-none" aria-label="Close">&times;</button>
             </div>
-            <form id="categoryForm" method="POST">
-                <input type="hidden" name="categoryId" id="categoryId">
+            <form id="categoryForm" method="POST" onsubmit="return false;">
+                <input type="hidden" name="categoryId" id="categoryId" value="">
                 <div class="mb-4">
                     <label for="categoryName" class="block text-sm font-medium text-slate-700 mb-1">Category name</label>
-                    <input type="text" name="categoryName" id="categoryName" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <input type="text" name="categoryName" id="categoryName" required
+                           class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                           placeholder="e.g. Electronics">
                 </div>
+                <p id="categoryFormError" class="hidden text-sm text-red-600 mb-3"></p>
             </form>
-            <div class="flex justify-between mt-6">
+            <div class="flex justify-between mt-6 gap-3">
                 <button type="button" id="categoryDeleteBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">Delete</button>
-                <button type="button" id="categoryUpdateBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg">Save</button>
+                <button type="button" id="categoryUpdateBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg ml-auto">Save</button>
             </div>
         </div>
     </div>
